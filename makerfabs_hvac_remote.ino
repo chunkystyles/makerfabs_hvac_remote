@@ -1,5 +1,6 @@
-#include "FT6236.h"
-#include "Parallel16_9488.h"
+#include "screen_settings.h"
+#include "touch_screen_driver.h"
+#include "screen_display_driver.h"
 #include <lvgl.h>
 #include "ui.h"
 
@@ -15,16 +16,8 @@
 
 LGFX lcd;
 
-// Rotation:
-// 0 = none
-// 1 = 90 counter clockwise
-// 2 = 180
-// 3 = 270 counter clockwise
-static const uint_fast8_t screenRotation = 1;
-static const uint32_t screenWidth = 480;
-static const uint32_t screenHeight = 320;
 static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf[screenWidth * 10];
+static lv_color_t buf[MY_SCREEN_WIDTH * 10];
 
 void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p) {
   uint32_t w = (area->x2 - area->x1 + 1);
@@ -38,43 +31,16 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
   lv_disp_flush_ready(disp);
 }
 
-void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data) {
-  uint16_t x, y;
-  if (ft6236_coords(&x, &y)) {
-    data->state = LV_INDEV_STATE_PR;
-    switch(screenRotation){
-      case 1:
-        data->point.x = y;
-        data->point.y = screenHeight - x;
-        break;
-      case 2:
-        data->point.x = screenWidth - x;
-        data->point.y = screenHeight - y;
-        break;
-      case 3:
-        data->point.x = screenWidth - y;
-        data->point.y = x;
-        break;
-      default:
-        data->point.x = x;
-        data->point.y = y;
-        break;
-    }
-  } else {
-    data->state = LV_INDEV_STATE_REL;
-  }
-}
-
 void setup() {
     Serial.begin(115200);
     Serial.println("Setup start");
     lcd_init();
     lv_init();
-    lv_disp_draw_buf_init(&draw_buf, buf, NULL, screenWidth * 10);
+    lv_disp_draw_buf_init(&draw_buf, buf, NULL, MY_SCREEN_WIDTH * 10);
     static lv_disp_drv_t disp_drv;
     lv_disp_drv_init(&disp_drv);
-    disp_drv.hor_res = screenWidth;
-    disp_drv.ver_res = screenHeight;
+    disp_drv.hor_res = MY_SCREEN_WIDTH;
+    disp_drv.ver_res = MY_SCREEN_HEIGHT;
     disp_drv.flush_cb = my_disp_flush;
     disp_drv.draw_buf = &draw_buf;
     disp_drv.rotated = LV_DISP_ROT_NONE;
@@ -101,7 +67,7 @@ void lcd_init() {
 
     // lcd init
     lcd.init();
-    lcd.setRotation(screenRotation);
+    lcd.setRotation(MY_SCREEN_ROTATION);
     lcd.fillScreen(COLOR_BACKGROUND);
     lcd.setTextColor(COLOR_TEXT);
 

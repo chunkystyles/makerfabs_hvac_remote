@@ -1,4 +1,6 @@
 #include <Wire.h>
+#include <lvgl.h>
+#include "screen_settings.h"
 
 #define TOUCH_I2C_ADD 0x38
 
@@ -16,3 +18,5 @@ int getTouchPointY();
 int ft6236_pos(int pos[2]);
 
 int ft6236_coords(uint16_t *x, uint16_t *y);
+
+void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data);

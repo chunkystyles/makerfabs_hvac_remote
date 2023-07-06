@@ -1,4 +1,5 @@
 #include "hardware_setup.h"
+#include "mqtt_client.h"
 #include <lvgl.h>
 #include "ui.h"
 
@@ -8,10 +9,11 @@ void setup() {
     lcd_init();
     lvgl_init();
     ui_init();
-    wifi_init();
+    mqtt_init();
 }
 
 void loop() {
     lv_timer_handler();
+    mqtt_loop();
     delay(5);
 }

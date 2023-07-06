@@ -5,6 +5,7 @@
 
 #include "ui.h"
 #include <Arduino.h>
+#include "mqtt_client.h"
 
 void display_slider_checked(lv_event_t * e)
 {
@@ -18,44 +19,47 @@ void display_slider_unchecked(lv_event_t * e)
 
 void boost_slider_checked(lv_event_t * e)
 {
-	Serial.println("Boost on");
+	mqtt_publish("Boost on");
 }
 
 void boost_slider_unchecked(lv_event_t * e)
 {
-	Serial.println("Boost off");
+	mqtt_publish("Boost off");
 }
 
 void mode_changed(lv_event_t * e)
 {
 	char buf[32];
 	lv_dropdown_get_selected_str(e->target, buf, sizeof(buf));
-	Serial.println(buf);
+	char msg[50];
+    snprintf (msg, 50, "Mode changed to %s", buf);
+	mqtt_publish(msg);
 }
 
 void slider_released(lv_event_t * e)
 {	
 	int32_t value = lv_slider_get_value(e->target);
-	Serial.print("Set point changed to ");
-	Serial.println(value);
+	char msg[50];
+    snprintf (msg, 50, "Set point changed to %ld", value);
+	mqtt_publish(msg);
 }
 
 void swing_vert_slider_checked(lv_event_t * e)
 {
-	Serial.println("Vertical swing on");
+	mqtt_publish("Vertical swing on");
 }
 
 void swing_vert_slider_unchecked(lv_event_t * e)
 {
-	Serial.println("Vertical swing off");
+	mqtt_publish("Vertical swing off");
 }
 
 void swing_horz_checked(lv_event_t * e)
 {
-	Serial.println("Horizontal swing on");
+	mqtt_publish("Horizontal swing on");
 }
 
 void swing_horz_unchecked(lv_event_t * e)
 {
-	Serial.println("Horizontal swing off");
+	mqtt_publish("Horizontal swing off");
 }

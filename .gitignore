@@ -34,3 +34,6 @@ google-services.json
 
 # VS Code
 .vscode/
+
+# secrets files
+secrets.*

@@ -8,6 +8,7 @@ void setup() {
     lcd_init();
     lvgl_init();
     ui_init();
+    wifi_init();
 }
 
 void loop() {

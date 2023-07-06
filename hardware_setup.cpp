@@ -61,3 +61,22 @@ void lvgl_init(){
     indev_drv.read_cb = my_touchpad_read;
     lv_indev_drv_register(&indev_drv);
 }
+
+void wifi_init(){
+    // MY_SSID and MY_PWD are defined in secrets.h which will not be uploaded
+    // You will need to create your own version of this file to compile
+    WiFi.begin(MY_SSID, MY_PWD);
+    int connect_count = 0;
+    while (WiFi.status() != WL_CONNECTED)
+    {
+        delay(500);
+        Serial.print(".");
+        connect_count++;
+        if (connect_count > 20)
+        {
+            Serial.println("Wifi time out");
+            break;
+        }
+    }
+    Serial.print("Wifi init finished.");
+}

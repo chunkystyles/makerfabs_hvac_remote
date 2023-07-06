@@ -1,8 +1,11 @@
 #include "screen_settings.h"
 #include "touch_screen_driver.h"
 #include "screen_display_driver.h"
+#include "secrets.h"
+
 #include <lvgl.h>
 #include "ui.h"
+#include <WiFi.h>
 
 #define I2C_SCL 39
 #define I2C_SDA 38
@@ -19,3 +22,5 @@ void lcd_init();
 void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
 
 void lvgl_init();
+
+void wifi_init();

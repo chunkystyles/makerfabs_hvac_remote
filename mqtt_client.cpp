@@ -2,8 +2,7 @@
 
 WiFiClient espClient;
 PubSubClient internal_mqtt_client(espClient);
-#define MSG_BUFFER_SIZE	(50)
-char msg[MSG_BUFFER_SIZE];
+char msg[MQTT_BUFFER_LENGTH];
 
 void mqtt_init(){
     // MY_SSID and MY_PWD are defined in secrets.h which will not be uploaded
@@ -69,7 +68,7 @@ void reconnect() {
   }
 }
 
-void mqtt_publish(const char * publishMessage){
-    snprintf(msg, MSG_BUFFER_SIZE, publishMessage);
+void mqtt_publish(char * publishMessage){
+    snprintf(msg, MQTT_BUFFER_LENGTH, publishMessage);
     internal_mqtt_client.publish(MY_MQTT_OUT_TOPIC, msg);
 }

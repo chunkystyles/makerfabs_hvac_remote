@@ -1,3 +1,12 @@
-#define MY_MQTT_IN_TOPIC "makerfabs/in"
-#define MY_MQTT_OUT_TOPIC "makerfabs/out"
+#define DEVICE_ID "1"
+
+#define IN_TOPIC "/in"
+#define OUT_TOPIC "/out"
+#define STATUS_TOPIC "/status"
+#define TOPICS_ROOT "makerfabs/hvacremote/"
+
+#define MY_MQTT_IN_TOPIC TOPICS_ROOT DEVICE_ID IN_TOPIC
+#define MY_MQTT_OUT_TOPIC TOPICS_ROOT DEVICE_ID OUT_TOPIC
+#define MY_MQTT_STATUS_TOPIC TOPICS_ROOT DEVICE_ID STATUS_TOPIC
 #define MQTT_BUFFER_LENGTH 300
+#define MQTT_STATUS_UPDATE_TIME_MS 60000

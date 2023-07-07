@@ -1,5 +1,6 @@
 #include "hvac.h"
 #include "mqtt_client.h"
+#include "ui.h"
 
 bool isBoost = false;
 bool isHorz = false;
@@ -52,9 +53,45 @@ void updateStateFromMqtt(char * message){
         Serial.println(error.f_str());
         return;
     }
-    isBoost = doc["boost"];
-    isHorz = doc["horizontal"];
-    isVert = doc["vertical"];
-    strcpy(mode, doc["mode"]);
-    setPoint = doc["setPoint"];
+    if (isBoost != doc["boost"]){
+        isBoost = doc["boost"];
+        if (isBoost){
+            lv_obj_add_state(ui_Switch1, LV_STATE_CHECKED);
+        } else {
+            lv_obj_clear_state(ui_Switch1, LV_STATE_CHECKED);
+        }
+    }
+    if (isHorz != doc["horizontal"]){
+        isHorz = doc["horizontal"];
+        if (isHorz){
+            lv_obj_add_state(ui_Switch3, LV_STATE_CHECKED);
+        } else {
+            lv_obj_clear_state(ui_Switch3, LV_STATE_CHECKED);
+        }
+    }
+    if (isVert != doc["vertical"]){
+        isVert = doc["vertical"];
+        if (isVert){
+            lv_obj_add_state(ui_Switch2, LV_STATE_CHECKED);
+        } else {
+            lv_obj_clear_state(ui_Switch2, LV_STATE_CHECKED);
+        }
+    }
+    if (strcmp(mode, doc["mode"]) != 0){
+        strcpy(mode, doc["mode"]);
+        if (strcmp(mode, "Off") == 0){
+            lv_dropdown_set_selected(ui_Dropdown2, 0);
+        } else if (strcmp(mode, "Heat") == 0){
+            lv_dropdown_set_selected(ui_Dropdown2, 1);
+        } else if (strcmp(mode, "Cool") == 0){
+            lv_dropdown_set_selected(ui_Dropdown2, 2);
+        } else if (strcmp(mode, "Fan") == 0){
+            lv_dropdown_set_selected(ui_Dropdown2, 3);
+        }
+    }
+    if (setPoint != doc["setPoint"]){
+        setPoint = doc["setPoint"];
+        lv_slider_set_value(ui_Slider2, setPoint, LV_ANIM_ON);
+        lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
+    }
 }

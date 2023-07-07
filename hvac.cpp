@@ -1,4 +1,5 @@
 #include "hvac.h"
+#include "mqtt_client.h"
 
 bool isBoost = false;
 bool isHorz = false;
@@ -41,4 +42,19 @@ void publishUpdate(){
     char output[MQTT_BUFFER_LENGTH];
     serializeJson(doc, output, MQTT_BUFFER_LENGTH);
     mqtt_publish(output);
+}
+
+void updateStateFromMqtt(char * message){
+    StaticJsonDocument<MQTT_BUFFER_LENGTH> doc;
+    DeserializationError error = deserializeJson(doc, message);
+    if (error) {
+        Serial.print(F("deserializeJson() failed: "));
+        Serial.println(error.f_str());
+        return;
+    }
+    isBoost = doc["boost"];
+    isHorz = doc["horizontal"];
+    isVert = doc["vertical"];
+    strcpy(mode, doc["mode"]);
+    setPoint = doc["setPoint"];
 }

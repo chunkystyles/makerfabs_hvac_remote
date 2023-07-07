@@ -1,4 +1,5 @@
 #include "mqtt_client.h"
+#include "hvac.h"
 
 WiFiClient espClient;
 PubSubClient internal_mqtt_client(espClient);
@@ -48,6 +49,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
   }
   Serial.println();
+  char * output = reinterpret_cast<char *>(payload);
+  updateStateFromMqtt(output);
 }
 
 void reconnect() {

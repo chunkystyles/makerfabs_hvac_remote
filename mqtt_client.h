@@ -15,3 +15,5 @@ void callback(char* topic, byte* payload, unsigned int length);
 void reconnect();
 
 void mqtt_publish(char * publishMessage);
+
+void updateStateFromMqtt(char * message);

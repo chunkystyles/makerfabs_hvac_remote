@@ -55,6 +55,8 @@ void ui_Screen1_screen_init(void)
 
     lv_obj_set_style_text_font(ui_Dropdown2, &lv_font_montserrat_14, LV_PART_INDICATOR | LV_STATE_DEFAULT);
 
+    lv_obj_set_style_text_font(lv_dropdown_get_list(ui_Dropdown2), &ui_font_MMBold24,  LV_PART_MAIN | LV_STATE_DEFAULT);
+
     ui_Switch2 = lv_switch_create(ui_Screen1);
     lv_obj_set_width(ui_Switch2, 100);
     lv_obj_set_height(ui_Switch2, 50);

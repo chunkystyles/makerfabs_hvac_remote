@@ -39,7 +39,7 @@ void publishUpdate(){
     doc["horizontal"] = isHorz;
     doc["vertical"] = isVert;
     doc["mode"] = mode;
-    doc["setPoint"] = setPoint;
+    doc["temperature"] = setPoint;
     char output[MQTT_BUFFER_LENGTH];
     serializeJson(doc, output, MQTT_BUFFER_LENGTH);
     mqtt_publish(output);
@@ -89,8 +89,8 @@ void updateStateFromMqtt(char * message){
             lv_dropdown_set_selected(ui_Dropdown2, 3);
         }
     }
-    if (setPoint != doc["setPoint"]){
-        setPoint = doc["setPoint"];
+    if (setPoint != doc["temperature"]){
+        setPoint = doc["temperature"];
         lv_slider_set_value(ui_Slider2, setPoint, LV_ANIM_ON);
         lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
     }

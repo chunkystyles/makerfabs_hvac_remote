@@ -12,7 +12,7 @@ void mqtt_loop();
 
 void callback(char* topic, byte* payload, unsigned int length);
 
-void connect(bool isReconnect);
+bool connect(bool isReconnect);
 
 void mqtt_publish(char * publishMessage);
 

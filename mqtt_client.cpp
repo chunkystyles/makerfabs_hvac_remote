@@ -23,7 +23,9 @@ void mqtt_init()
       break;
     }
   }
-  Serial.print("Wifi init finished.");
+  Serial.println("Wifi init finished.");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
   randomSeed(micros());
   timer = millis();
   internal_mqtt_client.setServer(MY_MQTT_URL, 1883); // MY_MQTT_URL is in secrets.h, needs to be a URL, IP Address uses a different constructor
@@ -33,25 +35,41 @@ void mqtt_init()
 
 void mqtt_loop()
 {
-  if (!WiFi.isConnected())
+  bool wifiConnected = WiFi.isConnected();
+  if (!wifiConnected)
   {
+    uint8_t tries = 0;
     Serial.println("WiFi disconnected");
     do
     {
       delay(5000);
       Serial.println("Attempting to reconnect WiFi");
-    } while (!WiFi.reconnect());
+      wifiConnected = WiFi.reconnect();
+    } while (!wifiConnected && ++tries < MQTT_MAX_RETRIES);
   }
-  if (!internal_mqtt_client.connected())
+  if (!wifiConnected)
   {
-    connect(true);
+    Serial.println("WiFi could not reconnect.");
+    return;
   }
-  internal_mqtt_client.loop();
-  unsigned long now = millis();
-  if (now - timer > MQTT_STATUS_UPDATE_TIME_MS)
+  bool mqttConnected = internal_mqtt_client.connected();
+  if (!mqttConnected)
   {
-    timer = now;
-    internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Checkin");
+    mqttConnected = connect(true);
+  }
+  if (mqttConnected)
+  {
+    internal_mqtt_client.loop();
+    unsigned long now = millis();
+    if (now - timer > MQTT_STATUS_UPDATE_TIME_MS)
+    {
+      timer = now;
+      internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Checkin");
+    }
+  }
+  else
+  {
+    Serial.println("MQTT could not reconnect.");
   }
 }
 
@@ -61,8 +79,9 @@ void callback(char *topic, byte *payload, unsigned int length)
   updateStateFromMqtt(output);
 }
 
-void connect(bool isReconnect)
+bool connect(bool isReconnect)
 {
+  uint8_t tries = 0;
   while (!internal_mqtt_client.connected())
   {
     Serial.print("Attempting MQTT connection...");
@@ -84,12 +103,20 @@ void connect(bool isReconnect)
     }
     else
     {
-      Serial.print("failed, rc=");
-      Serial.print(internal_mqtt_client.state());
-      Serial.println(" try again in 5 seconds");
-      delay(5000);
+      if (++tries < MQTT_MAX_RETRIES)
+      {
+        Serial.print("failed, rc=");
+        Serial.print(internal_mqtt_client.state());
+        Serial.println(" try again in 5 seconds");
+        delay(5000);
+      }
+      else
+      {
+        return false;
+      }
     }
   }
+  return true;
 }
 
 void mqtt_publish(char *publishMessage)

@@ -76,7 +76,11 @@ void mqtt_loop()
 void callback(char *topic, byte *payload, unsigned int length)
 {
   char *output = reinterpret_cast<char *>(payload);
-  updateStateFromMqtt(output);
+  if (strcmp(topic, MY_MQTT_IN_TOPIC) == 0){
+    updateStateFromMqtt(output);
+  } else if (strcmp(topic, MY_MQTT_TEMPERATURE_TOPIC) == 0){
+    updateTemperatureFromMqtt(output);
+  }
 }
 
 bool connect(bool isReconnect)
@@ -100,6 +104,7 @@ bool connect(bool isReconnect)
         internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Connected");
       }
       internal_mqtt_client.subscribe(MY_MQTT_IN_TOPIC);
+      internal_mqtt_client.subscribe(MY_MQTT_TEMPERATURE_TOPIC);
     }
     else
     {

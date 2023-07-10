@@ -14,3 +14,5 @@ void updateSetPointFromUi(int32_t value);
 void publishUpdate();
 
 void updateStateFromMqtt(char * message);
+
+void updateTemperatureFromMqtt(char * temperature);

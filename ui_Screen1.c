@@ -151,7 +151,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_x(ui_Label7, -85);
     lv_obj_set_y(ui_Label7, 20);
     lv_obj_set_align(ui_Label7, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label7, "Current 68°");
+    lv_label_set_text(ui_Label7, "Current --°");
     lv_obj_set_style_text_font(ui_Label7, &ui_font_MMBold24, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_Slider2, ui_event_Slider2, LV_EVENT_ALL, NULL);

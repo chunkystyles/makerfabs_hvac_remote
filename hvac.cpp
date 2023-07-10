@@ -1,6 +1,9 @@
 #include "hvac.h"
 #include "mqtt_client.h"
 #include "ui.h"
+#include <string.h>
+
+using std::string;
 
 bool isBoost = false;
 bool isHorz = false;
@@ -94,4 +97,18 @@ void updateStateFromMqtt(char * message){
         lv_slider_set_value(ui_Slider2, setPoint, LV_ANIM_ON);
         lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
     }
+}
+
+void updateTemperatureFromMqtt(char * temperature){
+    string converted = temperature;
+    string newString = "Current ";
+    for (int i = 0; i < sizeof(temperature); i++){
+        if (isdigit(temperature[i])){
+            newString += temperature[i];
+        } else {
+            break;
+        }
+    }
+    newString += "°";
+    lv_label_set_text(ui_Label7, newString.c_str());
 }

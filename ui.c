@@ -29,6 +29,8 @@ lv_obj_t * ui_Image1;
 lv_obj_t * ui_Image2;
 lv_obj_t * ui_Image3;
 lv_obj_t * ui_Image4;
+lv_obj_t * ui_Label6;
+lv_obj_t * ui_Label7;
 lv_obj_t * ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
@@ -47,7 +49,7 @@ void ui_event_Slider2(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_VALUE_CHANGED) {
-        _ui_slider_set_text_value(ui_Label2, target, "Set Point ", "°");
+        _ui_slider_set_text_value(ui_Label2, target, "Target ", "°");
     }
     if(event_code == LV_EVENT_RELEASED) {
         slider_released(e);

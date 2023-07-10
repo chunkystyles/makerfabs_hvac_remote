@@ -37,13 +37,15 @@ extern lv_obj_t * ui_Image1;
 extern lv_obj_t * ui_Image2;
 extern lv_obj_t * ui_Image3;
 extern lv_obj_t * ui_Image4;
+extern lv_obj_t * ui_Label6;
+extern lv_obj_t * ui_Label7;
 extern lv_obj_t * ui____initial_actions0;
 
 LV_IMG_DECLARE(ui_img_bw_arrow_png);    // assets\bw_arrow.png
 
 LV_FONT_DECLARE(ui_font_MMBold24);
-LV_FONT_DECLARE(ui_font_MMRegular24);
 LV_FONT_DECLARE(ui_font_MMMedium24);
+LV_FONT_DECLARE(ui_font_MMRegular24);
 
 void ui_init(void);
 

@@ -10,6 +10,7 @@ static uint32_t user_data = 10;
 const uint16_t timeout = 5000;
 bool isScreenDimmed = false;
 bool isScreenOff = false;
+bool doScreenDimming = true;
 
 void lcd_init() {
     // Pin init
@@ -70,7 +71,7 @@ void lvgl_init(){
 }
 
 void screen_timer_event(lv_timer_t * timer){
-    if (!isScreenOff){
+    if (doScreenDimming && !isScreenOff){
         if (!isScreenDimmed){
             isScreenDimmed = true;
             lcd.setBrightness(MY_DIM_BRIGHTNESS);
@@ -90,4 +91,10 @@ void reset_screen_timer(){
     }
     isScreenDimmed = false;
     isScreenOff = false;
+}
+
+void setDoScreenDimming(bool input){
+    if (input != doScreenDimming){
+        doScreenDimming = input;
+    }
 }

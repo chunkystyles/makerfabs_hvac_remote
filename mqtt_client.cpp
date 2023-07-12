@@ -5,11 +5,13 @@ WiFiClient espClient;
 PubSubClient internal_mqtt_client(espClient);
 char msg[MQTT_BUFFER_LENGTH];
 unsigned long retryTimer;
+bool disconnected = true;
 
 void mqtt_init()
 {
   // MY_SSID and MY_PWD are defined in secrets.h which will not be uploaded
   // You will need to create your own version of this file to compile
+  WiFi.setAutoConnect(true);
   WiFi.begin(MY_SSID, MY_PWD);
   int connect_count = 0;
   while (WiFi.status() != WL_CONNECTED)
@@ -23,6 +25,7 @@ void mqtt_init()
       break;
     }
   }
+  disconnected = false;
   Serial.println("Wifi init finished.");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
@@ -35,21 +38,10 @@ void mqtt_init()
 
 void mqtt_loop()
 {
-  bool wifiConnected = WiFi.isConnected();
-  if (!wifiConnected)
+  if (!WiFi.isConnected())
   {
-    uint8_t tries = 0;
-    Serial.println("WiFi disconnected");
-    do
-    {
-      delay(5000);
-      Serial.println("Attempting to reconnect WiFi");
-      wifiConnected = WiFi.reconnect();
-    } while (!wifiConnected && ++tries < MQTT_MAX_RETRIES);
-  }
-  if (!wifiConnected)
-  {
-    Serial.println("WiFi could not reconnect.");
+    disconnected = true;
+    // TODO: create screen to display disconnected
     return;
   }
   bool mqttConnected = internal_mqtt_client.connected();
@@ -64,22 +56,33 @@ void mqtt_loop()
     if (now - retryTimer > MQTT_STATUS_UPDATE_TIME_MS)
     {
       retryTimer = now;
-      internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Checkin");
+      if (disconnected)
+      {
+        disconnected = false;
+        internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Reconnected");
+      }
+      else
+      {
+        internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Checkin");
+      }
     }
-  }
-  else
-  {
-    Serial.println("MQTT could not reconnect.");
   }
 }
 
 void callback(char *topic, byte *payload, unsigned int length)
 {
   char *output = reinterpret_cast<char *>(payload);
-  if (strcmp(topic, MY_MQTT_IN_TOPIC) == 0){
+  if (strcmp(topic, MY_MQTT_IN_TOPIC) == 0)
+  {
     updateStateFromMqtt(output);
-  } else if (strcmp(topic, MY_MQTT_TEMPERATURE_TOPIC) == 0){
+  }
+  else if (strcmp(topic, MY_MQTT_TEMPERATURE_TOPIC) == 0)
+  {
     updateTemperatureFromMqtt(output);
+  }
+  else if (strcmp(topic, MY_MQTT_DOOR_TOPIC) == 0)
+  {
+    updateDoorFromMqtt(output);
   }
 }
 
@@ -88,23 +91,21 @@ bool connect(bool isReconnect)
   uint8_t tries = 0;
   while (!internal_mqtt_client.connected())
   {
-    Serial.print("Attempting MQTT connection...");
     String clientId = "ESP8266Client-";
     clientId += String(random(0xffff), HEX);
     if (internal_mqtt_client.connect(clientId.c_str()))
     {
       if (isReconnect)
       {
-        Serial.println("reconnected");
         internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Reconnected");
       }
       else
       {
-        Serial.println("connected");
         internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Connected");
       }
       internal_mqtt_client.subscribe(MY_MQTT_IN_TOPIC);
       internal_mqtt_client.subscribe(MY_MQTT_TEMPERATURE_TOPIC);
+      internal_mqtt_client.subscribe(MY_MQTT_DOOR_TOPIC);
     }
     else
     {

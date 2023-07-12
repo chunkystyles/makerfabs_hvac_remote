@@ -8,11 +8,13 @@
 #include "screen_manager.h"
 #include <Arduino.h>
 
-void screen_one_clicked(lv_event_t * e){
+void screen_clicked(lv_event_t * e){
 	reset_screen_timer();
 }
 
-void screen_two_clicked(lv_event_t * e){
+void door_screen_clicked(lv_event_t * e){
+	_ui_screen_change(ui_Screen1, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+	setDoScreenDimming(true);
 	reset_screen_timer();
 }
 

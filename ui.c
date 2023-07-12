@@ -64,7 +64,7 @@ void ui_event_Screen1(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_RELEASED) {
-        screen_one_clicked(e);
+        screen_clicked(e);
     }
 }
 void ui_event_Slider2(lv_event_t * e)
@@ -125,7 +125,7 @@ void ui_event_Screen2(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        screen_two_clicked(e);
+        screen_clicked(e);
     }
 }
 void ui_event_Screen3(lv_event_t * e)
@@ -133,7 +133,7 @@ void ui_event_Screen3(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_PRESSED) {
-        _ui_screen_change(ui_Screen1, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+        door_screen_clicked(e);
     }
 }
 void ui_event_Button2(lv_event_t * e)
@@ -141,7 +141,7 @@ void ui_event_Button2(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_PRESSED) {
-        screen_two_clicked(e);
+        door_screen_clicked(e);
     }
 }
 

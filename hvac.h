@@ -16,3 +16,5 @@ void publishUpdate();
 void updateStateFromMqtt(char * message);
 
 void updateTemperatureFromMqtt(char * temperature);
+
+void updateDoorFromMqtt(char * message);

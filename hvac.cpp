@@ -1,6 +1,7 @@
 #include "hvac.h"
 #include "mqtt_client.h"
 #include "ui.h"
+#include "screen_manager.h"
 #include <string.h>
 
 using std::string;
@@ -10,6 +11,7 @@ bool isHorz = false;
 bool isVert = false;
 int32_t setPoint = 68;
 char mode[32] = "Off";
+bool isDoorOpen = false;
 
 void updateBoostFromUi(bool isOn){
     isBoost = isOn;
@@ -97,6 +99,7 @@ void updateStateFromMqtt(char * message){
         lv_slider_set_value(ui_Slider2, setPoint, LV_ANIM_ON);
         lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
     }
+    reset_screen_timer();
 }
 
 void updateTemperatureFromMqtt(char * temperature){
@@ -111,4 +114,23 @@ void updateTemperatureFromMqtt(char * temperature){
     }
     newString += "°";
     lv_label_set_text(ui_Label7, newString.c_str());
+}
+
+void updateDoorFromMqtt(char * message){
+    if (strncmp("open", message, 4) == 0){
+        Serial.println("door open");
+        isDoorOpen = true;
+        _ui_screen_change(ui_Screen3, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+        setDoScreenDimming(false);
+        reset_screen_timer();
+    } else {
+        Serial.println("door closed");
+        if (isDoorOpen){
+            Serial.println("door closed 2");
+            isDoorOpen = false;
+            _ui_screen_change(ui_Screen1, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+            setDoScreenDimming(true);
+            reset_screen_timer();
+        }
+    }
 }

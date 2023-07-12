@@ -120,7 +120,7 @@ void updateDoorFromMqtt(char * message){
     if (strncmp("open", message, 4) == 0){
         Serial.println("door open");
         isDoorOpen = true;
-        _ui_screen_change(ui_Screen3, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+        lv_scr_load(ui_Screen3);
         setDoScreenDimming(false);
         reset_screen_timer();
     } else {
@@ -128,7 +128,7 @@ void updateDoorFromMqtt(char * message){
         if (isDoorOpen){
             Serial.println("door closed 2");
             isDoorOpen = false;
-            _ui_screen_change(ui_Screen1, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+            lv_scr_load(ui_Screen1);
             setDoScreenDimming(true);
             reset_screen_timer();
         }

@@ -9,6 +9,7 @@ class LGFX : public lgfx::LGFX_Device
     // lgfx::Panel_ILI9341 _panel_instance;
     lgfx::Panel_ILI9488 _panel_instance;
     lgfx::Bus_Parallel16 _bus_instance; // 8ビットパラレルバスのインスタンス (ESP32のみ)
+    lgfx::Light_PWM _light_instance;
 
 public:
     // コンストラクタを作成し、ここで各種設定を行います。
@@ -71,6 +72,16 @@ public:
             cfg.bus_shared = true;    // SDカードとバスを共有している場合 trueに設定(drawJpgFile等でバス制御を行います)
 
             _panel_instance.config(cfg);
+        }
+
+        {
+              auto cfg = _light_instance.config();
+              cfg.pin_bl = 45;
+              cfg.invert = false;
+              cfg.freq = 1023;
+              cfg.pwm_channel = 0;
+              _light_instance.config(cfg);
+              _panel_instance.setLight(&_light_instance);
         }
 
         setPanel(&_panel_instance); // 使用するパネルをセットします。

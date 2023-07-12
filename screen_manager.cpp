@@ -1,8 +1,15 @@
-#include "hardware_setup.h"
+#include "screen_manager.h"
 
 LGFX lcd;
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[MY_SCREEN_WIDTH * 10];
+static lv_disp_drv_t disp_drv;
+static lv_indev_drv_t indev_drv;
+static lv_timer_t * timer;
+static uint32_t user_data = 10;
+const uint16_t timeout = 5000;
+bool isScreenDimmed = false;
+bool isScreenOff = false;
 
 void lcd_init() {
     // Pin init
@@ -16,6 +23,7 @@ void lcd_init() {
     lcd.setRotation(MY_SCREEN_ROTATION);
     lcd.fillScreen(COLOR_BACKGROUND);
     lcd.setTextColor(COLOR_TEXT);
+    lcd.setBrightness(MY_MAX_BRIGHTNESS);
 
     // I2C init
     Wire.begin(I2C_SDA, I2C_SCL);
@@ -47,7 +55,6 @@ void lvgl_init(){
     lcd_init();
     lv_init();
     lv_disp_draw_buf_init(&draw_buf, buf, NULL, MY_SCREEN_WIDTH * 10);
-    static lv_disp_drv_t disp_drv;
     lv_disp_drv_init(&disp_drv);
     disp_drv.hor_res = MY_SCREEN_WIDTH;
     disp_drv.ver_res = MY_SCREEN_HEIGHT;
@@ -55,9 +62,32 @@ void lvgl_init(){
     disp_drv.draw_buf = &draw_buf;
     disp_drv.rotated = LV_DISP_ROT_NONE;
     lv_disp_drv_register(&disp_drv);
-    static lv_indev_drv_t indev_drv;
     lv_indev_drv_init(&indev_drv);
     indev_drv.type = LV_INDEV_TYPE_POINTER;
     indev_drv.read_cb = my_touchpad_read;
     lv_indev_drv_register(&indev_drv);
+    timer = lv_timer_create(screen_timer_event, MY_SCREEN_TIMER,  &user_data);
+}
+
+void screen_timer_event(lv_timer_t * timer){
+    if (!isScreenOff){
+        if (!isScreenDimmed){
+            isScreenDimmed = true;
+            lcd.setBrightness(MY_DIM_BRIGHTNESS);
+        } else {
+            isScreenOff = true;
+            lcd.setBrightness(MY_MIN_BRIGHTNESS);
+            _ui_screen_change(ui_Screen2, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+        }
+    }
+}
+
+void reset_screen_timer(){
+    lcd.setBrightness(MY_MAX_BRIGHTNESS);
+    lv_timer_reset(timer);
+    if (isScreenOff){
+        _ui_screen_change(ui_Screen1, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+    }
+    isScreenDimmed = false;
+    isScreenOff = false;
 }

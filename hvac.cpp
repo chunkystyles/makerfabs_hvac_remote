@@ -103,7 +103,7 @@ void updateTemperatureFromMqtt(char * temperature){
     string converted = temperature;
     string newString = "Current ";
     for (int i = 0; i < sizeof(temperature); i++){
-        if (isdigit(temperature[i])){
+        if (isdigit(temperature[i]) || temperature[i] == '.'){
             newString += temperature[i];
         } else {
             break;

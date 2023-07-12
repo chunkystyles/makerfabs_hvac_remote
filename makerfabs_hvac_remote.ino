@@ -1,4 +1,4 @@
-#include "hardware_setup.h"
+#include "screen_manager.h"
 #include "mqtt_client.h"
 #include <lvgl.h>
 #include "ui.h"
@@ -15,5 +15,5 @@ void setup() {
 void loop() {
     lv_timer_handler();
     mqtt_loop();
-    delay(5);
+    delay(10);
 }

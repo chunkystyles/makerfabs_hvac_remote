@@ -4,7 +4,7 @@
 WiFiClient espClient;
 PubSubClient internal_mqtt_client(espClient);
 char msg[MQTT_BUFFER_LENGTH];
-unsigned long timer;
+unsigned long retryTimer;
 
 void mqtt_init()
 {
@@ -27,8 +27,8 @@ void mqtt_init()
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
   randomSeed(micros());
-  timer = millis();
-  internal_mqtt_client.setServer(MY_MQTT_URL, 1883); // MY_MQTT_URL is in secrets.h, needs to be a URL, IP Address uses a different constructor
+  retryTimer = millis();
+  internal_mqtt_client.setServer(MY_MQTT_URL, 1883); // MY_MQTT_URL is in secrets.h
   internal_mqtt_client.setCallback(callback);
   connect(false);
 }
@@ -61,9 +61,9 @@ void mqtt_loop()
   {
     internal_mqtt_client.loop();
     unsigned long now = millis();
-    if (now - timer > MQTT_STATUS_UPDATE_TIME_MS)
+    if (now - retryTimer > MQTT_STATUS_UPDATE_TIME_MS)
     {
-      timer = now;
+      retryTimer = now;
       internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Checkin");
     }
   }

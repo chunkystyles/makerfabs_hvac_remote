@@ -159,5 +159,6 @@ void ui_Screen1_screen_init(void)
     lv_obj_add_event_cb(ui_Dropdown2, ui_event_Dropdown2, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Switch2, ui_event_Switch2, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Switch3, ui_event_Switch3, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Screen1, ui_event_Screen1, LV_EVENT_ALL, NULL);
 
 }

@@ -10,6 +10,7 @@
 
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
+void ui_event_Screen1(lv_event_t * e);
 lv_obj_t * ui_Screen1;
 void ui_event_Slider2(lv_event_t * e);
 lv_obj_t * ui_Slider2;
@@ -31,6 +32,20 @@ lv_obj_t * ui_Image3;
 lv_obj_t * ui_Image4;
 lv_obj_t * ui_Label6;
 lv_obj_t * ui_Label7;
+
+// SCREEN: ui_Screen2
+void ui_Screen2_screen_init(void);
+void ui_event_Screen2(lv_event_t * e);
+lv_obj_t * ui_Screen2;
+
+// SCREEN: ui_Screen3
+void ui_Screen3_screen_init(void);
+void ui_event_Screen3(lv_event_t * e);
+lv_obj_t * ui_Screen3;
+void ui_event_Button2(lv_event_t * e);
+lv_obj_t * ui_Button2;
+lv_obj_t * ui_Label9;
+lv_obj_t * ui_Label8;
 lv_obj_t * ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
@@ -44,6 +59,14 @@ lv_obj_t * ui____initial_actions0;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+void ui_event_Screen1(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_RELEASED) {
+        screen_one_clicked(e);
+    }
+}
 void ui_event_Slider2(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -64,6 +87,7 @@ void ui_event_Switch1(lv_event_t * e)
     }
     if(event_code == LV_EVENT_VALUE_CHANGED &&  !lv_obj_has_state(target, LV_STATE_CHECKED)) {
         boost_slider_unchecked(e);
+        _ui_state_modify(ui_Screen1, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
     }
 }
 void ui_event_Dropdown2(lv_event_t * e)
@@ -96,6 +120,30 @@ void ui_event_Switch3(lv_event_t * e)
         swing_horz_unchecked(e);
     }
 }
+void ui_event_Screen2(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        screen_two_clicked(e);
+    }
+}
+void ui_event_Screen3(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_screen_change(ui_Screen1, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+    }
+}
+void ui_event_Button2(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_PRESSED) {
+        screen_two_clicked(e);
+    }
+}
 
 ///////////////////// SCREENS ////////////////////
 
@@ -108,6 +156,8 @@ void ui_init(void)
                                                true, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
     ui_Screen1_screen_init();
+    ui_Screen2_screen_init();
+    ui_Screen3_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_Screen1);
 }

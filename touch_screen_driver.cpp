@@ -1,4 +1,5 @@
 #include "touch_screen_driver.h"
+#include "screen_manager.h"
 
 int readTouchReg(int reg)
 {

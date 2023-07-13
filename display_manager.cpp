@@ -1,4 +1,4 @@
-#include "screen_manager.h"
+#include "display_manager.h"
 
 LGFX lcd;
 static lv_disp_draw_buf_t draw_buf;

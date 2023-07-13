@@ -4,8 +4,8 @@
 // Project name: 7_5_23
 
 #include "ui.h"
-#include "hvac.h"
-#include "screen_manager.h"
+#include "state_manager.h"
+#include "display_manager.h"
 #include <Arduino.h>
 
 void screen_clicked(lv_event_t * e){

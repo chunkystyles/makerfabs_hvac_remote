@@ -1,9 +1,8 @@
 #include <Wire.h>
 #include <lvgl.h>
-#include "screen_settings.h"
+#include "display_settings.h"
 
 #define TOUCH_I2C_ADD 0x38
-
 #define TOUCH_REG_XL 0x04
 #define TOUCH_REG_XH 0x03
 #define TOUCH_REG_YL 0x06

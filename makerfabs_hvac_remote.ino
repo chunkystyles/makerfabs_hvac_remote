@@ -1,4 +1,4 @@
-#include "screen_manager.h"
+#include "display_manager.h"
 #include "mqtt_client.h"
 #include <lvgl.h>
 #include "ui.h"

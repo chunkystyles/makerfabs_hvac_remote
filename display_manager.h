@@ -1,6 +1,6 @@
-#include "screen_settings.h"
+#include "display_settings.h"
 #include "touch_screen_driver.h"
-#include "screen_display_driver.h"
+#include "display_driver.h"
 #include "secrets.h"
 
 #include <lvgl.h>

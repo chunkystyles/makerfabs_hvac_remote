@@ -3,7 +3,8 @@
 #include <lvgl.h>
 #include "ui.h"
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     Serial.println("Setup start");
     lcd_init();
@@ -12,7 +13,8 @@ void setup() {
     mqtt_init();
 }
 
-void loop() {
+void loop()
+{
     lv_timer_handler();
     mqtt_loop();
     delay(10);

@@ -22,7 +22,7 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 
 void lvgl_init();
 
-void screen_timer_event(lv_timer_t * timer);
+void screen_timer_event(lv_timer_t *timer);
 
 void reset_screen_timer();
 

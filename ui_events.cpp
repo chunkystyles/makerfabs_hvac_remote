@@ -8,29 +8,31 @@
 #include "display_manager.h"
 #include <Arduino.h>
 
-void screen_clicked(lv_event_t * e){
+void screen_clicked(lv_event_t *e)
+{
 	reset_screen_timer();
 }
 
-void door_screen_clicked(lv_event_t * e){
+void door_screen_clicked(lv_event_t *e)
+{
 	lv_scr_load(ui_Screen1);
 	setDoScreenDimming(true);
 	reset_screen_timer();
 }
 
-void boost_slider_checked(lv_event_t * e)
+void boost_slider_checked(lv_event_t *e)
 {
 	updateBoostFromUi(true);
 	reset_screen_timer();
 }
 
-void boost_slider_unchecked(lv_event_t * e)
+void boost_slider_unchecked(lv_event_t *e)
 {
 	updateBoostFromUi(false);
 	reset_screen_timer();
 }
 
-void mode_changed(lv_event_t * e)
+void mode_changed(lv_event_t *e)
 {
 	char buf[32];
 	lv_dropdown_get_selected_str(e->target, buf, sizeof(buf));
@@ -38,32 +40,32 @@ void mode_changed(lv_event_t * e)
 	reset_screen_timer();
 }
 
-void slider_released(lv_event_t * e)
-{	
+void slider_released(lv_event_t *e)
+{
 	int32_t value = lv_slider_get_value(e->target);
 	updateSetPointFromUi(value);
 	reset_screen_timer();
 }
 
-void swing_vert_slider_checked(lv_event_t * e)
+void swing_vert_slider_checked(lv_event_t *e)
 {
 	updateVertFromUi(true);
 	reset_screen_timer();
 }
 
-void swing_vert_slider_unchecked(lv_event_t * e)
+void swing_vert_slider_unchecked(lv_event_t *e)
 {
 	updateVertFromUi(false);
 	reset_screen_timer();
 }
 
-void swing_horz_checked(lv_event_t * e)
+void swing_horz_checked(lv_event_t *e)
 {
 	updateHorzFromUi(true);
 	reset_screen_timer();
 }
 
-void swing_horz_unchecked(lv_event_t * e)
+void swing_horz_unchecked(lv_event_t *e)
 {
 	updateHorzFromUi(false);
 	reset_screen_timer();

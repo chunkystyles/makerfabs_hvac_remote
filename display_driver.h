@@ -75,13 +75,13 @@ public:
         }
 
         {
-              auto cfg = _light_instance.config();
-              cfg.pin_bl = 45;
-              cfg.invert = false;
-              cfg.freq = 1023;
-              cfg.pwm_channel = 0;
-              _light_instance.config(cfg);
-              _panel_instance.setLight(&_light_instance);
+            auto cfg = _light_instance.config();
+            cfg.pin_bl = 45;
+            cfg.invert = false;
+            cfg.freq = 1023;
+            cfg.pwm_channel = 0;
+            _light_instance.config(cfg);
+            _panel_instance.setLight(&_light_instance);
         }
 
         setPanel(&_panel_instance); // 使用するパネルをセットします。

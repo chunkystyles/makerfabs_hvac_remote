@@ -7,7 +7,8 @@
 #define _7_5_23_UI_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #include <lvgl.h>
@@ -16,51 +17,51 @@ extern "C" {
 #include "ui_comp.h"
 #include "ui_comp_hook.h"
 #include "ui_events.h"
-// SCREEN: ui_Screen1
-void ui_Screen1_screen_init(void);
-void ui_event_Screen1(lv_event_t * e);
-extern lv_obj_t * ui_Screen1;
-void ui_event_Slider2(lv_event_t * e);
-extern lv_obj_t * ui_Slider2;
-extern lv_obj_t * ui_Label2;
-void ui_event_Switch1(lv_event_t * e);
-extern lv_obj_t * ui_Switch1;
-extern lv_obj_t * ui_Label4;
-void ui_event_Dropdown2(lv_event_t * e);
-extern lv_obj_t * ui_Dropdown2;
-void ui_event_Switch2(lv_event_t * e);
-extern lv_obj_t * ui_Switch2;
-void ui_event_Switch3(lv_event_t * e);
-extern lv_obj_t * ui_Switch3;
-extern lv_obj_t * ui_Label1;
-extern lv_obj_t * ui_Label3;
-extern lv_obj_t * ui_Image1;
-extern lv_obj_t * ui_Image2;
-extern lv_obj_t * ui_Image3;
-extern lv_obj_t * ui_Image4;
-extern lv_obj_t * ui_Label6;
-extern lv_obj_t * ui_Label7;
-// SCREEN: ui_Screen2
-void ui_Screen2_screen_init(void);
-void ui_event_Screen2(lv_event_t * e);
-extern lv_obj_t * ui_Screen2;
-// SCREEN: ui_Screen3
-void ui_Screen3_screen_init(void);
-void ui_event_Screen3(lv_event_t * e);
-extern lv_obj_t * ui_Screen3;
-void ui_event_Button2(lv_event_t * e);
-extern lv_obj_t * ui_Button2;
-extern lv_obj_t * ui_Label9;
-extern lv_obj_t * ui_Label8;
-extern lv_obj_t * ui____initial_actions0;
+    // SCREEN: ui_Screen1
+    void ui_Screen1_screen_init(void);
+    void ui_event_Screen1(lv_event_t *e);
+    extern lv_obj_t *ui_Screen1;
+    void ui_event_Slider2(lv_event_t *e);
+    extern lv_obj_t *ui_Slider2;
+    extern lv_obj_t *ui_Label2;
+    void ui_event_Switch1(lv_event_t *e);
+    extern lv_obj_t *ui_Switch1;
+    extern lv_obj_t *ui_Label4;
+    void ui_event_Dropdown2(lv_event_t *e);
+    extern lv_obj_t *ui_Dropdown2;
+    void ui_event_Switch2(lv_event_t *e);
+    extern lv_obj_t *ui_Switch2;
+    void ui_event_Switch3(lv_event_t *e);
+    extern lv_obj_t *ui_Switch3;
+    extern lv_obj_t *ui_Label1;
+    extern lv_obj_t *ui_Label3;
+    extern lv_obj_t *ui_Image1;
+    extern lv_obj_t *ui_Image2;
+    extern lv_obj_t *ui_Image3;
+    extern lv_obj_t *ui_Image4;
+    extern lv_obj_t *ui_Label6;
+    extern lv_obj_t *ui_Label7;
+    // SCREEN: ui_Screen2
+    void ui_Screen2_screen_init(void);
+    void ui_event_Screen2(lv_event_t *e);
+    extern lv_obj_t *ui_Screen2;
+    // SCREEN: ui_Screen3
+    void ui_Screen3_screen_init(void);
+    void ui_event_Screen3(lv_event_t *e);
+    extern lv_obj_t *ui_Screen3;
+    void ui_event_Button2(lv_event_t *e);
+    extern lv_obj_t *ui_Button2;
+    extern lv_obj_t *ui_Label9;
+    extern lv_obj_t *ui_Label8;
+    extern lv_obj_t *ui____initial_actions0;
 
-LV_IMG_DECLARE(ui_img_bw_arrow_png);    // assets\bw_arrow.png
+    LV_IMG_DECLARE(ui_img_bw_arrow_png); // assets\bw_arrow.png
 
-LV_FONT_DECLARE(ui_font_MMBold24);
-LV_FONT_DECLARE(ui_font_MMMedium24);
-LV_FONT_DECLARE(ui_font_MMRegular24);
+    LV_FONT_DECLARE(ui_font_MMBold24);
+    LV_FONT_DECLARE(ui_font_MMMedium24);
+    LV_FONT_DECLARE(ui_font_MMRegular24);
 
-void ui_init(void);
+    void ui_init(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/

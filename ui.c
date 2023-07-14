@@ -10,137 +10,150 @@
 
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
-void ui_event_Screen1(lv_event_t * e);
-lv_obj_t * ui_Screen1;
-void ui_event_Slider2(lv_event_t * e);
-lv_obj_t * ui_Slider2;
-lv_obj_t * ui_Label2;
-void ui_event_Switch1(lv_event_t * e);
-lv_obj_t * ui_Switch1;
-lv_obj_t * ui_Label4;
-void ui_event_Dropdown2(lv_event_t * e);
-lv_obj_t * ui_Dropdown2;
-void ui_event_Switch2(lv_event_t * e);
-lv_obj_t * ui_Switch2;
-void ui_event_Switch3(lv_event_t * e);
-lv_obj_t * ui_Switch3;
-lv_obj_t * ui_Label1;
-lv_obj_t * ui_Label3;
-lv_obj_t * ui_Image1;
-lv_obj_t * ui_Image2;
-lv_obj_t * ui_Image3;
-lv_obj_t * ui_Image4;
-lv_obj_t * ui_Label6;
-lv_obj_t * ui_Label7;
+void ui_event_Screen1(lv_event_t *e);
+lv_obj_t *ui_Screen1;
+void ui_event_Slider2(lv_event_t *e);
+lv_obj_t *ui_Slider2;
+lv_obj_t *ui_Label2;
+void ui_event_Switch1(lv_event_t *e);
+lv_obj_t *ui_Switch1;
+lv_obj_t *ui_Label4;
+void ui_event_Dropdown2(lv_event_t *e);
+lv_obj_t *ui_Dropdown2;
+void ui_event_Switch2(lv_event_t *e);
+lv_obj_t *ui_Switch2;
+void ui_event_Switch3(lv_event_t *e);
+lv_obj_t *ui_Switch3;
+lv_obj_t *ui_Label1;
+lv_obj_t *ui_Label3;
+lv_obj_t *ui_Image1;
+lv_obj_t *ui_Image2;
+lv_obj_t *ui_Image3;
+lv_obj_t *ui_Image4;
+lv_obj_t *ui_Label6;
+lv_obj_t *ui_Label7;
 
 // SCREEN: ui_Screen2
 void ui_Screen2_screen_init(void);
-void ui_event_Screen2(lv_event_t * e);
-lv_obj_t * ui_Screen2;
+void ui_event_Screen2(lv_event_t *e);
+lv_obj_t *ui_Screen2;
 
 // SCREEN: ui_Screen3
 void ui_Screen3_screen_init(void);
-void ui_event_Screen3(lv_event_t * e);
-lv_obj_t * ui_Screen3;
-void ui_event_Button2(lv_event_t * e);
-lv_obj_t * ui_Button2;
-lv_obj_t * ui_Label9;
-lv_obj_t * ui_Label8;
-lv_obj_t * ui____initial_actions0;
+void ui_event_Screen3(lv_event_t *e);
+lv_obj_t *ui_Screen3;
+void ui_event_Button2(lv_event_t *e);
+lv_obj_t *ui_Button2;
+lv_obj_t *ui_Label9;
+lv_obj_t *ui_Label8;
+lv_obj_t *ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
-    #error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
+#error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
 #endif
-#if LV_COLOR_16_SWAP !=0
-    #error "LV_COLOR_16_SWAP should be 0 to match SquareLine Studio's settings"
+#if LV_COLOR_16_SWAP != 0
+#error "LV_COLOR_16_SWAP should be 0 to match SquareLine Studio's settings"
 #endif
 
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
-void ui_event_Screen1(lv_event_t * e)
+void ui_event_Screen1(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_RELEASED) {
+    lv_obj_t *target = lv_event_get_target(e);
+    if (event_code == LV_EVENT_RELEASED)
+    {
         screen_clicked(e);
     }
 }
-void ui_event_Slider2(lv_event_t * e)
+void ui_event_Slider2(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_VALUE_CHANGED) {
+    lv_obj_t *target = lv_event_get_target(e);
+    if (event_code == LV_EVENT_VALUE_CHANGED)
+    {
         _ui_slider_set_text_value(ui_Label2, target, "Target ", "°");
     }
-    if(event_code == LV_EVENT_RELEASED) {
+    if (event_code == LV_EVENT_RELEASED)
+    {
         slider_released(e);
     }
 }
-void ui_event_Switch1(lv_event_t * e)
+void ui_event_Switch1(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target, LV_STATE_CHECKED)) {
+    lv_obj_t *target = lv_event_get_target(e);
+    if (event_code == LV_EVENT_VALUE_CHANGED && lv_obj_has_state(target, LV_STATE_CHECKED))
+    {
         boost_slider_checked(e);
     }
-    if(event_code == LV_EVENT_VALUE_CHANGED &&  !lv_obj_has_state(target, LV_STATE_CHECKED)) {
+    if (event_code == LV_EVENT_VALUE_CHANGED && !lv_obj_has_state(target, LV_STATE_CHECKED))
+    {
         boost_slider_unchecked(e);
         _ui_state_modify(ui_Screen1, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
     }
 }
-void ui_event_Dropdown2(lv_event_t * e)
+void ui_event_Dropdown2(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_VALUE_CHANGED) {
+    lv_obj_t *target = lv_event_get_target(e);
+    if (event_code == LV_EVENT_VALUE_CHANGED)
+    {
         mode_changed(e);
     }
 }
-void ui_event_Switch2(lv_event_t * e)
+void ui_event_Switch2(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target, LV_STATE_CHECKED)) {
+    lv_obj_t *target = lv_event_get_target(e);
+    if (event_code == LV_EVENT_VALUE_CHANGED && lv_obj_has_state(target, LV_STATE_CHECKED))
+    {
         swing_vert_slider_checked(e);
     }
-    if(event_code == LV_EVENT_VALUE_CHANGED &&  !lv_obj_has_state(target, LV_STATE_CHECKED)) {
+    if (event_code == LV_EVENT_VALUE_CHANGED && !lv_obj_has_state(target, LV_STATE_CHECKED))
+    {
         swing_vert_slider_unchecked(e);
     }
 }
-void ui_event_Switch3(lv_event_t * e)
+void ui_event_Switch3(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target, LV_STATE_CHECKED)) {
+    lv_obj_t *target = lv_event_get_target(e);
+    if (event_code == LV_EVENT_VALUE_CHANGED && lv_obj_has_state(target, LV_STATE_CHECKED))
+    {
         swing_horz_checked(e);
     }
-    if(event_code == LV_EVENT_VALUE_CHANGED &&  !lv_obj_has_state(target, LV_STATE_CHECKED)) {
+    if (event_code == LV_EVENT_VALUE_CHANGED && !lv_obj_has_state(target, LV_STATE_CHECKED))
+    {
         swing_horz_unchecked(e);
     }
 }
-void ui_event_Screen2(lv_event_t * e)
+void ui_event_Screen2(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_CLICKED) {
+    lv_obj_t *target = lv_event_get_target(e);
+    if (event_code == LV_EVENT_CLICKED)
+    {
         screen_clicked(e);
     }
 }
-void ui_event_Screen3(lv_event_t * e)
+void ui_event_Screen3(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_PRESSED) {
+    lv_obj_t *target = lv_event_get_target(e);
+    if (event_code == LV_EVENT_PRESSED)
+    {
         door_screen_clicked(e);
     }
 }
-void ui_event_Button2(lv_event_t * e)
+void ui_event_Button2(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_PRESSED) {
+    lv_obj_t *target = lv_event_get_target(e);
+    if (event_code == LV_EVENT_PRESSED)
+    {
         door_screen_clicked(e);
     }
 }
@@ -151,9 +164,9 @@ void ui_init(void)
 {
     LV_EVENT_GET_COMP_CHILD = lv_event_register_id();
 
-    lv_disp_t * dispp = lv_disp_get_default();
-    lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
-                                               true, LV_FONT_DEFAULT);
+    lv_disp_t *dispp = lv_disp_get_default();
+    lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
+                                              true, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
     ui_Screen1_screen_init();
     ui_Screen2_screen_init();

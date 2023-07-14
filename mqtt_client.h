@@ -10,10 +10,10 @@ void mqtt_init();
 
 void mqtt_loop();
 
-void callback(char* topic, byte* payload, unsigned int length);
+void callback(char *topic, byte *payload, unsigned int length);
 
 bool connect(bool isReconnect);
 
-void mqtt_publish(char * publishMessage);
+void mqtt_publish(char *publishMessage);
 
-void updateStateFromMqtt(char * message);
+void updateStateFromMqtt(char *message);

@@ -12,32 +12,38 @@ bool isVert = false;
 int32_t setPoint = 68;
 char mode[32] = "Off";
 
-void updateBoostFromUi(bool isOn){
+void updateBoostFromUi(bool isOn)
+{
     isBoost = isOn;
     publishUpdate();
 }
 
-void updateHorzFromUi(bool isOn){
+void updateHorzFromUi(bool isOn)
+{
     isHorz = isOn;
     publishUpdate();
 }
 
-void updateVertFromUi(bool isOn){
+void updateVertFromUi(bool isOn)
+{
     isVert = isOn;
     publishUpdate();
 }
 
-void updateModeFromUi(char * message){
+void updateModeFromUi(char *message)
+{
     strcpy(mode, message);
     publishUpdate();
 }
 
-void updateSetPointFromUi(int32_t value){
+void updateSetPointFromUi(int32_t value)
+{
     setPoint = value;
     publishUpdate();
 }
 
-void publishUpdate(){
+void publishUpdate()
+{
     StaticJsonDocument<MQTT_BUFFER_LENGTH> doc;
     doc["boost"] = isBoost;
     doc["horizontal"] = isHorz;
@@ -49,51 +55,74 @@ void publishUpdate(){
     mqtt_publish(output);
 }
 
-void updateStateFromMqtt(char * message){
+void updateStateFromMqtt(char *message)
+{
     StaticJsonDocument<MQTT_BUFFER_LENGTH> doc;
     DeserializationError error = deserializeJson(doc, message);
-    if (error) {
+    if (error)
+    {
         Serial.print(F("deserializeJson() failed: "));
         Serial.println(error.f_str());
         return;
     }
-    if (isBoost != doc["boost"]){
+    if (isBoost != doc["boost"])
+    {
         isBoost = doc["boost"];
-        if (isBoost){
+        if (isBoost)
+        {
             lv_obj_add_state(ui_Switch1, LV_STATE_CHECKED);
-        } else {
+        }
+        else
+        {
             lv_obj_clear_state(ui_Switch1, LV_STATE_CHECKED);
         }
     }
-    if (isHorz != doc["horizontal"]){
+    if (isHorz != doc["horizontal"])
+    {
         isHorz = doc["horizontal"];
-        if (isHorz){
+        if (isHorz)
+        {
             lv_obj_add_state(ui_Switch3, LV_STATE_CHECKED);
-        } else {
+        }
+        else
+        {
             lv_obj_clear_state(ui_Switch3, LV_STATE_CHECKED);
         }
     }
-    if (isVert != doc["vertical"]){
+    if (isVert != doc["vertical"])
+    {
         isVert = doc["vertical"];
-        if (isVert){
+        if (isVert)
+        {
             lv_obj_add_state(ui_Switch2, LV_STATE_CHECKED);
-        } else {
+        }
+        else
+        {
             lv_obj_clear_state(ui_Switch2, LV_STATE_CHECKED);
         }
     }
-    if (strcmp(mode, doc["mode"]) != 0){
+    if (strcmp(mode, doc["mode"]) != 0)
+    {
         strcpy(mode, doc["mode"]);
-        if (strcmp(mode, "Off") == 0){
+        if (strcmp(mode, "Off") == 0)
+        {
             lv_dropdown_set_selected(ui_Dropdown2, 0);
-        } else if (strcmp(mode, "Heat") == 0){
+        }
+        else if (strcmp(mode, "Heat") == 0)
+        {
             lv_dropdown_set_selected(ui_Dropdown2, 1);
-        } else if (strcmp(mode, "Cool") == 0){
+        }
+        else if (strcmp(mode, "Cool") == 0)
+        {
             lv_dropdown_set_selected(ui_Dropdown2, 2);
-        } else if (strcmp(mode, "Fan") == 0){
+        }
+        else if (strcmp(mode, "Fan") == 0)
+        {
             lv_dropdown_set_selected(ui_Dropdown2, 3);
         }
     }
-    if (setPoint != doc["temperature"]){
+    if (setPoint != doc["temperature"])
+    {
         setPoint = doc["temperature"];
         lv_slider_set_value(ui_Slider2, setPoint, LV_ANIM_ON);
         lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
@@ -101,13 +130,18 @@ void updateStateFromMqtt(char * message){
     reset_screen_timer();
 }
 
-void updateTemperatureFromMqtt(char * temperature){
+void updateTemperatureFromMqtt(char *temperature)
+{
     string converted = temperature;
     string newString = "Current ";
-    for (int i = 0; i < sizeof(temperature); i++){
-        if (isdigit(temperature[i]) || temperature[i] == '.'){
+    for (int i = 0; i < sizeof(temperature); i++)
+    {
+        if (isdigit(temperature[i]) || temperature[i] == '.')
+        {
             newString += temperature[i];
-        } else {
+        }
+        else
+        {
             break;
         }
     }
@@ -115,8 +149,10 @@ void updateTemperatureFromMqtt(char * temperature){
     lv_label_set_text(ui_Label7, newString.c_str());
 }
 
-void updateDoorFromMqtt(char * message){
-    if (strncmp("open", message, 4) == 0){
+void updateDoorFromMqtt(char *message)
+{
+    if (strncmp("open", message, 4) == 0)
+    {
         lv_scr_load(ui_Screen3);
         setDoScreenDimming(false);
         reset_screen_timer();

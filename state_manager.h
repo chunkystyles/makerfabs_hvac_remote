@@ -7,14 +7,14 @@ void updateHorzFromUi(bool isOn);
 
 void updateVertFromUi(bool isOn);
 
-void updateModeFromUi(char * message);
+void updateModeFromUi(char *message);
 
 void updateSetPointFromUi(int32_t value);
 
 void publishUpdate();
 
-void updateStateFromMqtt(char * message);
+void updateStateFromMqtt(char *message);
 
-void updateTemperatureFromMqtt(char * temperature);
+void updateTemperatureFromMqtt(char *temperature);
 
-void updateDoorFromMqtt(char * message);
+void updateDoorFromMqtt(char *message);

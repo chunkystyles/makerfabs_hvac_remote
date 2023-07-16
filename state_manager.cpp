@@ -49,7 +49,14 @@ void updateModeFromUi(char *message)
 
 void updateSetPointFromUi(int32_t value)
 {
-    setPoint = value;
+    if (strcmp(mode, "Fan") == 0)
+    {
+        fanSpeed = value;
+    }
+    else
+    {
+        setPoint = value;
+    }
     publishUpdate();
 }
 
@@ -141,7 +148,8 @@ void updateStateFromMqtt(char *message)
         if (optionIndex > -1)
         {
             lv_dropdown_set_selected(ui_Dropdown2, optionIndex);
-            if (strcmp(mode, "Fan") == 0){
+            if (strcmp(mode, "Fan") == 0)
+            {
                 lv_label_set_text(ui_Label2, get_target_label_text(fanSpeed));
             }
             else
@@ -156,7 +164,8 @@ void updateStateFromMqtt(char *message)
         {
             lv_slider_set_range(ui_Slider2, minHeat, maxHeat);
         }
-        else {
+        else
+        {
             lv_slider_set_range(ui_Slider2, minCool, maxCool);
         }
     }
@@ -204,11 +213,11 @@ char *get_target_label_text(int32_t value)
     {
         if (value == 11)
         {
-            sprintf(targetLabel, "Speed Auto");
+            sprintf(targetLabel, "Fan Auto");
         }
         else
         {
-            sprintf(targetLabel, "Speed %d", value);
+            sprintf(targetLabel, "Fan speed %d", value);
         }
     }
     else if (strcmp(mode, "Off") == 0)

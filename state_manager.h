@@ -18,3 +18,7 @@ void updateStateFromMqtt(char *message);
 void updateTemperatureFromMqtt(char *temperature);
 
 void updateDoorFromMqtt(char *message);
+
+char *get_target_label_text(int32_t value);
+
+void mode_change_ui_update();

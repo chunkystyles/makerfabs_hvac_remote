@@ -70,3 +70,8 @@ void swing_horz_unchecked(lv_event_t *e)
 	updateHorzFromUi(false);
 	reset_screen_timer();
 }
+
+char *get_slider_label_text(lv_obj_t *target)
+{
+	return get_target_label_text(lv_slider_get_value(target));
+}

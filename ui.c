@@ -74,7 +74,7 @@ void ui_event_Slider2(lv_event_t *e)
     lv_obj_t *target = lv_event_get_target(e);
     if (event_code == LV_EVENT_VALUE_CHANGED)
     {
-        _ui_slider_set_text_value(ui_Label2, target, "Target ", "°");
+        lv_label_set_text(ui_Label2, get_slider_label_text(target));
     }
     if (event_code == LV_EVENT_RELEASED)
     {

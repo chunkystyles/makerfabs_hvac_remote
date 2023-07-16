@@ -21,6 +21,7 @@ extern "C"
     void swing_vert_slider_unchecked(lv_event_t *e);
     void swing_horz_checked(lv_event_t *e);
     void swing_horz_unchecked(lv_event_t *e);
+    char *get_slider_label_text(lv_obj_t *target);
 
 #ifdef __cplusplus
 } /*extern "C"*/

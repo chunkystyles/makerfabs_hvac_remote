@@ -76,6 +76,8 @@ void publishUpdate()
 
 void updateStateFromMqtt(char *message)
 {
+    bool isWakeUpdate = false;
+    bool isStealthUpdate = false;
     StaticJsonDocument<MQTT_BUFFER_LENGTH> doc;
     DeserializationError error = deserializeJson(doc, message);
     if (error)
@@ -84,39 +86,51 @@ void updateStateFromMqtt(char *message)
         Serial.println(error.f_str());
         return;
     }
-    isBoost = doc["boost"];
-    if (isBoost)
+    if (isBoost != doc["boost"])
     {
-        lv_obj_add_state(ui_Switch1, LV_STATE_CHECKED);
+        isBoost = doc["boost"];
+        isWakeUpdate = true;
     }
-    else
+    if (isHorz != doc["horizontal"])
     {
-        lv_obj_clear_state(ui_Switch1, LV_STATE_CHECKED);
+        isHorz = doc["horizontal"];
+        isWakeUpdate = true;
     }
-    isHorz = doc["horizontal"];
-    if (isHorz)
+    if (isVert != doc["vertical"])
     {
-        lv_obj_add_state(ui_Switch3, LV_STATE_CHECKED);
+        isVert = doc["vertical"];
+        isWakeUpdate = true;
     }
-    else
+    if (minCool != doc["minCool"])
     {
-        lv_obj_clear_state(ui_Switch3, LV_STATE_CHECKED);
+        minCool = doc["minCool"];
+        isStealthUpdate = true;
     }
-    isVert = doc["vertical"];
-    if (isVert)
+    if (maxCool != doc["maxCool"])
     {
-        lv_obj_add_state(ui_Switch2, LV_STATE_CHECKED);
+        maxCool = doc["maxCool"];
+        isStealthUpdate = true;
     }
-    else
+    if (minHeat != doc["minHeat"])
     {
-        lv_obj_clear_state(ui_Switch2, LV_STATE_CHECKED);
+        minHeat = doc["minHeat"];
+        isStealthUpdate = true;
     }
-    minCool = doc["minCool"];
-    maxCool = doc["maxCool"];
-    minHeat = doc["minHeat"];
-    maxHeat = doc["maxHeat"];
-    setPoint = doc["temperature"];
-    fanSpeed = doc["fanSpeed"];
+    if (maxHeat != doc["maxHeat"])
+    {
+        maxHeat = doc["maxHeat"];
+        isStealthUpdate = true;
+    }
+    if (setPoint != doc["temperature"])
+    {
+        setPoint = doc["temperature"];
+        isWakeUpdate = true;
+    }
+    if (fanSpeed != doc["fanSpeed"])
+    {
+        fanSpeed = doc["fanSpeed"];
+        isWakeUpdate = true;
+    }
     if (strcmp(mode, doc["mode"]) != 0)
     {
         strcpy(mode, doc["mode"]);
@@ -124,10 +138,17 @@ void updateStateFromMqtt(char *message)
         if (optionIndex > -1)
         {
             lv_dropdown_set_selected(ui_Dropdown2, optionIndex);
+            isWakeUpdate = true;
         }
     }
-    mode_change_ui_update();
-    reset_screen_timer();
+    if (isWakeUpdate || isStealthUpdate)
+    {
+        mode_change_ui_update();
+    }
+    if (isWakeUpdate)
+    {
+        reset_screen_timer();
+    }
 }
 
 void updateTemperatureFromMqtt(char *temperature)
@@ -244,6 +265,30 @@ void mode_change_ui_update()
             }
             lv_slider_set_value(ui_Slider2, setPoint, LV_ANIM_OFF);
             lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
+            if (isBoost)
+            {
+                lv_obj_add_state(ui_Switch1, LV_STATE_CHECKED);
+            }
+            else
+            {
+                lv_obj_clear_state(ui_Switch1, LV_STATE_CHECKED);
+            }
+            if (isHorz)
+            {
+                lv_obj_add_state(ui_Switch3, LV_STATE_CHECKED);
+            }
+            else
+            {
+                lv_obj_clear_state(ui_Switch3, LV_STATE_CHECKED);
+            }
+            if (isVert)
+            {
+                lv_obj_add_state(ui_Switch2, LV_STATE_CHECKED);
+            }
+            else
+            {
+                lv_obj_clear_state(ui_Switch2, LV_STATE_CHECKED);
+            }
         }
     }
 }

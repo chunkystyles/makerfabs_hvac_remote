@@ -7,10 +7,10 @@
 
 // COMPONENT Slider1
 
-lv_obj_t *ui_Slider1_create(lv_obj_t *comp_parent)
+lv_obj_t * ui_Slider1_create(lv_obj_t * comp_parent)
 {
 
-    lv_obj_t *cui_Slider1;
+    lv_obj_t * cui_Slider1;
     cui_Slider1 = lv_slider_create(comp_parent);
     lv_obj_set_width(cui_Slider1, 283);
     lv_obj_set_height(cui_Slider1, 33);
@@ -18,10 +18,11 @@ lv_obj_t *ui_Slider1_create(lv_obj_t *comp_parent)
     lv_obj_set_y(cui_Slider1, 102);
     lv_obj_set_align(cui_Slider1, LV_ALIGN_CENTER);
 
-    lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * _UI_COMP_SLIDER1_NUM);
+    lv_obj_t ** children = lv_mem_alloc(sizeof(lv_obj_t *) * _UI_COMP_SLIDER1_NUM);
     children[UI_COMP_SLIDER1_SLIDER1] = cui_Slider1;
     lv_obj_add_event_cb(cui_Slider1, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(cui_Slider1, del_component_child_event_cb, LV_EVENT_DELETE, children);
     ui_comp_Slider1_create_hook(cui_Slider1);
     return cui_Slider1;
 }
+

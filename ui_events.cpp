@@ -15,7 +15,7 @@ void screen_clicked(lv_event_t *e)
 
 void door_screen_clicked(lv_event_t *e)
 {
-	lv_scr_load(ui_Screen1);
+	lv_scr_load(ui_main_screen);
 	set_do_screen_dimming(true);
 	reset_screen_timer();
 }

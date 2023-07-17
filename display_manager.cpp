@@ -89,7 +89,7 @@ void screen_timer_event(lv_timer_t *timer)
         {
             is_screen_off = true;
             lcd.setBrightness(MY_MIN_BRIGHTNESS);
-            lv_scr_load(ui_Screen2);
+            lv_scr_load(ui_blank_screen);
         }
     }
 }
@@ -98,9 +98,9 @@ void reset_screen_timer()
 {
     lcd.setBrightness(MY_MAX_BRIGHTNESS);
     lv_timer_reset(timer);
-    if (is_screen_off && ui_Screen2 == lv_scr_act())
+    if (is_screen_off && ui_blank_screen == lv_scr_act())
     {
-        lv_scr_load(ui_Screen1);
+        lv_scr_load(ui_main_screen);
     }
     is_screen_dimmed = false;
     is_screen_off = false;

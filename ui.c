@@ -5,175 +5,132 @@
 
 #include "ui.h"
 #include "ui_helpers.h"
+#include "ui_events.h"
 
 ///////////////////// VARIABLES ////////////////////
 
-// SCREEN: ui_Screen1
-void ui_Screen1_screen_init(void);
-void ui_event_Screen1(lv_event_t *e);
-lv_obj_t *ui_Screen1;
-void ui_event_Slider2(lv_event_t *e);
-lv_obj_t *ui_Slider2;
-lv_obj_t *ui_Label2;
-void ui_event_Switch1(lv_event_t *e);
-lv_obj_t *ui_Switch1;
-lv_obj_t *ui_Label4;
-void ui_event_Dropdown2(lv_event_t *e);
-lv_obj_t *ui_Dropdown2;
-void ui_event_Switch2(lv_event_t *e);
-lv_obj_t *ui_Switch2;
-void ui_event_Switch3(lv_event_t *e);
-lv_obj_t *ui_Switch3;
-lv_obj_t *ui_Label1;
-lv_obj_t *ui_Label3;
-lv_obj_t *ui_Image1;
-lv_obj_t *ui_Image2;
-lv_obj_t *ui_Image3;
-lv_obj_t *ui_Image4;
-lv_obj_t *ui_Label6;
-lv_obj_t *ui_Label7;
+// SCREEN: ui_main_screen
+void ui_main_screen_screen_init(void);
+void ui_event_main_screen(lv_event_t * e);
+lv_obj_t * ui_main_screen;
+void ui_event_main_slider(lv_event_t * e);
+lv_obj_t * ui_main_slider;
+lv_obj_t * ui_target_temp_label;
+void ui_event_boost_switch(lv_event_t * e);
+lv_obj_t * ui_boost_switch;
+lv_obj_t * ui_boost_label;
+void ui_event_mode_dropdown(lv_event_t * e);
+lv_obj_t * ui_mode_dropdown;
+void ui_event_fan_vert_switch(lv_event_t * e);
+lv_obj_t * ui_fan_vert_switch;
+void ui_event_fan_horz_switch(lv_event_t * e);
+lv_obj_t * ui_fan_horz_switch;
+lv_obj_t * ui_fan_vert_label;
+lv_obj_t * ui_fan_horz_label;
+lv_obj_t * ui_arrow_up_image;
+lv_obj_t * ui_arrow_down_image;
+lv_obj_t * ui_arrow_right_image;
+lv_obj_t * ui_arrow_left_image;
+lv_obj_t * ui_mode_label;
+lv_obj_t * ui_current_temp_label;
 
-// SCREEN: ui_Screen2
-void ui_Screen2_screen_init(void);
-void ui_event_Screen2(lv_event_t *e);
-lv_obj_t *ui_Screen2;
+// SCREEN: ui_blank_screen
+void ui_blank_screen_screen_init(void);
+void ui_event_blank_screen(lv_event_t * e);
+lv_obj_t * ui_blank_screen;
 
-// SCREEN: ui_Screen3
-void ui_Screen3_screen_init(void);
-void ui_event_Screen3(lv_event_t *e);
-lv_obj_t *ui_Screen3;
-void ui_event_Button2(lv_event_t *e);
-lv_obj_t *ui_Button2;
-lv_obj_t *ui_Label9;
-void ui_event_Label8(lv_event_t * e);
-lv_obj_t *ui_Label8;
+// SCREEN: ui_door_screen
+void ui_door_screen_screen_init(void);
+void ui_event_door_screen(lv_event_t * e);
+lv_obj_t * ui_door_screen;
+void ui_event_door_button(lv_event_t * e);
+lv_obj_t * ui_door_button;
+lv_obj_t * ui_door_button_label;
+void ui_event_door_label(lv_event_t * e);
+lv_obj_t * ui_door_label;
 
-// SCREEN: ui_Screen4
-void ui_Screen4_screen_init(void);
-void ui_event_Screen4(lv_event_t * e);
-lv_obj_t * ui_Screen4;
-void ui_event_Label10(lv_event_t * e);
-lv_obj_t * ui_Label10;
-lv_obj_t *ui____initial_actions0;
+// SCREEN: ui_reconnect_screen
+void ui_reconnect_screen_screen_init(void);
+void ui_event_reconnect_screen(lv_event_t * e);
+lv_obj_t * ui_reconnect_screen;
+void ui_event_reconnect_label(lv_event_t * e);
+lv_obj_t * ui_reconnect_label;
+lv_obj_t * ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
-#error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
+    #error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
 #endif
-#if LV_COLOR_16_SWAP != 0
-#error "LV_COLOR_16_SWAP should be 0 to match SquareLine Studio's settings"
+#if LV_COLOR_16_SWAP !=0
+    #error "LV_COLOR_16_SWAP should be 0 to match SquareLine Studio's settings"
 #endif
 
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
-void ui_event_Screen1(lv_event_t *e)
+void ui_event_main_screen(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t *target = lv_event_get_target(e);
-    if (event_code == LV_EVENT_RELEASED)
-    {
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_RELEASED) {
         screen_clicked(e);
     }
 }
-void ui_event_Slider2(lv_event_t *e)
+void ui_event_main_slider(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t *target = lv_event_get_target(e);
-    if (event_code == LV_EVENT_VALUE_CHANGED)
-    {
-        lv_label_set_text(ui_Label2, get_slider_label_text(target));
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_VALUE_CHANGED) {
+        // _ui_slider_set_text_value(ui_target_temp_label, target, "Target ", "°");
+        lv_label_set_text(ui_target_temp_label, get_slider_label_text(target));
     }
-    if (event_code == LV_EVENT_RELEASED)
-    {
+    if(event_code == LV_EVENT_RELEASED) {
         slider_released(e);
     }
 }
-void ui_event_Switch1(lv_event_t *e)
+void ui_event_boost_switch(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t *target = lv_event_get_target(e);
-    if (event_code == LV_EVENT_VALUE_CHANGED && lv_obj_has_state(target, LV_STATE_CHECKED))
-    {
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target, LV_STATE_CHECKED)) {
         boost_slider_checked(e);
     }
-    if (event_code == LV_EVENT_VALUE_CHANGED && !lv_obj_has_state(target, LV_STATE_CHECKED))
-    {
+    if(event_code == LV_EVENT_VALUE_CHANGED &&  !lv_obj_has_state(target, LV_STATE_CHECKED)) {
         boost_slider_unchecked(e);
-        _ui_state_modify(ui_Screen1, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+        _ui_state_modify(ui_main_screen, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
     }
 }
-void ui_event_Dropdown2(lv_event_t *e)
+void ui_event_mode_dropdown(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t *target = lv_event_get_target(e);
-    if (event_code == LV_EVENT_VALUE_CHANGED)
-    {
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_VALUE_CHANGED) {
         mode_changed(e);
     }
 }
-void ui_event_Switch2(lv_event_t *e)
+void ui_event_fan_vert_switch(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t *target = lv_event_get_target(e);
-    if (event_code == LV_EVENT_VALUE_CHANGED && lv_obj_has_state(target, LV_STATE_CHECKED))
-    {
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target, LV_STATE_CHECKED)) {
         swing_vert_slider_checked(e);
     }
-    if (event_code == LV_EVENT_VALUE_CHANGED && !lv_obj_has_state(target, LV_STATE_CHECKED))
-    {
+    if(event_code == LV_EVENT_VALUE_CHANGED &&  !lv_obj_has_state(target, LV_STATE_CHECKED)) {
         swing_vert_slider_unchecked(e);
     }
 }
-void ui_event_Switch3(lv_event_t *e)
+void ui_event_fan_horz_switch(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t *target = lv_event_get_target(e);
-    if (event_code == LV_EVENT_VALUE_CHANGED && lv_obj_has_state(target, LV_STATE_CHECKED))
-    {
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target, LV_STATE_CHECKED)) {
         swing_horz_checked(e);
     }
-    if (event_code == LV_EVENT_VALUE_CHANGED && !lv_obj_has_state(target, LV_STATE_CHECKED))
-    {
+    if(event_code == LV_EVENT_VALUE_CHANGED &&  !lv_obj_has_state(target, LV_STATE_CHECKED)) {
         swing_horz_unchecked(e);
     }
 }
-void ui_event_Screen2(lv_event_t *e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t *target = lv_event_get_target(e);
-    if (event_code == LV_EVENT_CLICKED)
-    {
-        screen_clicked(e);
-    }
-}
-void ui_event_Screen3(lv_event_t *e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t *target = lv_event_get_target(e);
-    if (event_code == LV_EVENT_PRESSED)
-    {
-        door_screen_clicked(e);
-    }
-}
-void ui_event_Button2(lv_event_t *e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t *target = lv_event_get_target(e);
-    if (event_code == LV_EVENT_PRESSED)
-    {
-        door_screen_clicked(e);
-    }
-}
-void ui_event_Label8(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_CLICKED) {
-        door_screen_clicked(e);
-    }
-}
-void ui_event_Screen4(lv_event_t * e)
+void ui_event_blank_screen(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
@@ -181,7 +138,39 @@ void ui_event_Screen4(lv_event_t * e)
         screen_clicked(e);
     }
 }
-void ui_event_Label10(lv_event_t * e)
+void ui_event_door_screen(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_screen_change(ui_main_screen, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+    }
+}
+void ui_event_door_button(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_PRESSED) {
+        screen_clicked(e);
+    }
+}
+void ui_event_door_label(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        screen_clicked(e);
+    }
+}
+void ui_event_reconnect_screen(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        screen_clicked(e);
+    }
+}
+void ui_event_reconnect_label(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
@@ -196,14 +185,14 @@ void ui_init(void)
 {
     LV_EVENT_GET_COMP_CHILD = lv_event_register_id();
 
-    lv_disp_t *dispp = lv_disp_get_default();
-    lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
-                                              true, LV_FONT_DEFAULT);
+    lv_disp_t * dispp = lv_disp_get_default();
+    lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
+                                               true, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
-    ui_Screen1_screen_init();
-    ui_Screen2_screen_init();
-    ui_Screen3_screen_init();
-    ui_Screen4_screen_init();
+    ui_main_screen_screen_init();
+    ui_blank_screen_screen_init();
+    ui_door_screen_screen_init();
+    ui_reconnect_screen_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
-    lv_disp_load_scr(ui_Screen1);
+    lv_disp_load_scr(ui_main_screen);
 }

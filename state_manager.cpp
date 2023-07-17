@@ -134,10 +134,10 @@ void update_state(char *message)
     if (strcmp(mode, doc["mode"]) != 0)
     {
         strcpy(mode, doc["mode"]);
-        int32_t option_index = lv_dropdown_get_option_index(ui_Dropdown2, mode);
+        int32_t option_index = lv_dropdown_get_option_index(ui_mode_dropdown, mode);
         if (option_index > -1)
         {
-            lv_dropdown_set_selected(ui_Dropdown2, option_index);
+            lv_dropdown_set_selected(ui_mode_dropdown, option_index);
             is_wake_update = true;
         }
     }
@@ -167,14 +167,14 @@ void update_temperature(char *temperature)
         }
     }
     newString += "°";
-    lv_label_set_text(ui_Label7, newString.c_str());
+    lv_label_set_text(ui_current_temp_label, newString.c_str());
 }
 
 void update_door(char *message)
 {
     if (strncmp("open", message, 4) == 0)
     {
-        lv_scr_load(ui_Screen3);
+        lv_scr_load(ui_door_screen);
         set_do_screen_dimming(false);
         reset_screen_timer();
     }
@@ -208,86 +208,86 @@ void update_ui()
 {
     if (strcmp(mode, "Off") == 0)
     {
-        lv_obj_add_flag(ui_Slider2, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(ui_Switch1, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(ui_Switch2, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(ui_Switch3, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(ui_Label1, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(ui_Label2, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(ui_Label3, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(ui_Label4, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(ui_Image1, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(ui_Image2, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(ui_Image3, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(ui_Image4, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_main_slider, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_boost_switch, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_fan_vert_switch, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_fan_horz_switch, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_fan_vert_label, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_target_temp_label, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_fan_horz_label, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_boost_label, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_arrow_up_image, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_arrow_down_image, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_arrow_left_image, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_arrow_right_image, LV_OBJ_FLAG_HIDDEN);
     }
     else
     {
         if (strcmp(mode, "Fan") == 0)
         {
-            lv_obj_clear_flag(ui_Slider2, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_add_flag(ui_Switch1, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_add_flag(ui_Switch2, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_add_flag(ui_Switch3, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_add_flag(ui_Label1, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Label2, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_add_flag(ui_Label3, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_add_flag(ui_Label4, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_add_flag(ui_Image1, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_add_flag(ui_Image2, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_add_flag(ui_Image3, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_add_flag(ui_Image4, LV_OBJ_FLAG_HIDDEN);
-            lv_slider_set_range(ui_Slider2, MIN_FAN_SPEED, MAX_FAN_SPEED);
-            lv_slider_set_value(ui_Slider2, fan_speed, LV_ANIM_OFF);
-            lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
+            lv_obj_clear_flag(ui_main_slider, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_boost_switch, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_fan_vert_switch, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_fan_horz_switch, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_fan_vert_label, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_target_temp_label, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_fan_horz_label, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_boost_label, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_arrow_up_image, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_arrow_down_image, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_arrow_left_image, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_arrow_right_image, LV_OBJ_FLAG_HIDDEN);
+            lv_slider_set_range(ui_main_slider, MIN_FAN_SPEED, MAX_FAN_SPEED);
+            lv_slider_set_value(ui_main_slider, fan_speed, LV_ANIM_OFF);
+            lv_event_send(ui_main_slider, LV_EVENT_VALUE_CHANGED, NULL);
         }
         else
         {
-            lv_obj_clear_flag(ui_Slider2, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Switch1, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Switch2, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Switch3, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Label1, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Label2, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Label3, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Label4, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Image1, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Image2, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Image3, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(ui_Image4, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_main_slider, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_boost_switch, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_fan_vert_switch, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_fan_horz_switch, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_fan_vert_label, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_target_temp_label, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_fan_horz_label, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_boost_label, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_arrow_up_image, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_arrow_down_image, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_arrow_left_image, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_arrow_right_image, LV_OBJ_FLAG_HIDDEN);
             if (strcmp(mode, "Heat") == 0)
             {
-                lv_slider_set_range(ui_Slider2, min_heat, max_heat);
+                lv_slider_set_range(ui_main_slider, min_heat, max_heat);
             }
             else
             {
-                lv_slider_set_range(ui_Slider2, min_cool, max_cool);
+                lv_slider_set_range(ui_main_slider, min_cool, max_cool);
             }
-            lv_slider_set_value(ui_Slider2, target_temperature, LV_ANIM_OFF);
-            lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
+            lv_slider_set_value(ui_main_slider, target_temperature, LV_ANIM_OFF);
+            lv_event_send(ui_main_slider, LV_EVENT_VALUE_CHANGED, NULL);
             if (is_boost)
             {
-                lv_obj_add_state(ui_Switch1, LV_STATE_CHECKED);
+                lv_obj_add_state(ui_boost_switch, LV_STATE_CHECKED);
             }
             else
             {
-                lv_obj_clear_state(ui_Switch1, LV_STATE_CHECKED);
+                lv_obj_clear_state(ui_boost_switch, LV_STATE_CHECKED);
             }
             if (is_horizontal)
             {
-                lv_obj_add_state(ui_Switch3, LV_STATE_CHECKED);
+                lv_obj_add_state(ui_fan_horz_switch, LV_STATE_CHECKED);
             }
             else
             {
-                lv_obj_clear_state(ui_Switch3, LV_STATE_CHECKED);
+                lv_obj_clear_state(ui_fan_horz_switch, LV_STATE_CHECKED);
             }
             if (is_vertical)
             {
-                lv_obj_add_state(ui_Switch2, LV_STATE_CHECKED);
+                lv_obj_add_state(ui_fan_vert_switch, LV_STATE_CHECKED);
             }
             else
             {
-                lv_obj_clear_state(ui_Switch2, LV_STATE_CHECKED);
+                lv_obj_clear_state(ui_fan_vert_switch, LV_STATE_CHECKED);
             }
         }
     }

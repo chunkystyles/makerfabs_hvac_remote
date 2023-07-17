@@ -7,8 +7,7 @@
 #define _7_5_23_UI_H
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 #include <lvgl.h>
@@ -17,59 +16,58 @@ extern "C"
 #include "ui_comp.h"
 #include "ui_comp_hook.h"
 #include "ui_events.h"
-    // SCREEN: ui_Screen1
-    void ui_Screen1_screen_init(void);
-    void ui_event_Screen1(lv_event_t *e);
-    extern lv_obj_t *ui_Screen1;
-    void ui_event_Slider2(lv_event_t *e);
-    extern lv_obj_t *ui_Slider2;
-    extern lv_obj_t *ui_Label2;
-    void ui_event_Switch1(lv_event_t *e);
-    extern lv_obj_t *ui_Switch1;
-    extern lv_obj_t *ui_Label4;
-    void ui_event_Dropdown2(lv_event_t *e);
-    extern lv_obj_t *ui_Dropdown2;
-    void ui_event_Switch2(lv_event_t *e);
-    extern lv_obj_t *ui_Switch2;
-    void ui_event_Switch3(lv_event_t *e);
-    extern lv_obj_t *ui_Switch3;
-    extern lv_obj_t *ui_Label1;
-    extern lv_obj_t *ui_Label3;
-    extern lv_obj_t *ui_Image1;
-    extern lv_obj_t *ui_Image2;
-    extern lv_obj_t *ui_Image3;
-    extern lv_obj_t *ui_Image4;
-    extern lv_obj_t *ui_Label6;
-    extern lv_obj_t *ui_Label7;
-    // SCREEN: ui_Screen2
-    void ui_Screen2_screen_init(void);
-    void ui_event_Screen2(lv_event_t *e);
-    extern lv_obj_t *ui_Screen2;
-    // SCREEN: ui_Screen3
-    void ui_Screen3_screen_init(void);
-    void ui_event_Screen3(lv_event_t *e);
-    extern lv_obj_t *ui_Screen3;
-    void ui_event_Button2(lv_event_t *e);
-    extern lv_obj_t *ui_Button2;
-    extern lv_obj_t *ui_Label9;
-    void ui_event_Label8(lv_event_t * e);
-    extern lv_obj_t *ui_Label8;
-    // SCREEN: ui_Screen4
-    void ui_Screen4_screen_init(void);
-    void ui_event_Screen4(lv_event_t * e);
-    extern lv_obj_t * ui_Screen4;
-    void ui_event_Label10(lv_event_t * e);
-    extern lv_obj_t * ui_Label10;
-    extern lv_obj_t * ui____initial_actions0;
-    extern lv_obj_t *ui____initial_actions0;
+// SCREEN: ui_main_screen
+void ui_main_screen_screen_init(void);
+void ui_event_main_screen(lv_event_t * e);
+extern lv_obj_t * ui_main_screen;
+void ui_event_main_slider(lv_event_t * e);
+extern lv_obj_t * ui_main_slider;
+extern lv_obj_t * ui_target_temp_label;
+void ui_event_boost_switch(lv_event_t * e);
+extern lv_obj_t * ui_boost_switch;
+extern lv_obj_t * ui_boost_label;
+void ui_event_mode_dropdown(lv_event_t * e);
+extern lv_obj_t * ui_mode_dropdown;
+void ui_event_fan_vert_switch(lv_event_t * e);
+extern lv_obj_t * ui_fan_vert_switch;
+void ui_event_fan_horz_switch(lv_event_t * e);
+extern lv_obj_t * ui_fan_horz_switch;
+extern lv_obj_t * ui_fan_vert_label;
+extern lv_obj_t * ui_fan_horz_label;
+extern lv_obj_t * ui_arrow_up_image;
+extern lv_obj_t * ui_arrow_down_image;
+extern lv_obj_t * ui_arrow_right_image;
+extern lv_obj_t * ui_arrow_left_image;
+extern lv_obj_t * ui_mode_label;
+extern lv_obj_t * ui_current_temp_label;
+// SCREEN: ui_blank_screen
+void ui_blank_screen_screen_init(void);
+void ui_event_blank_screen(lv_event_t * e);
+extern lv_obj_t * ui_blank_screen;
+// SCREEN: ui_door_screen
+void ui_door_screen_screen_init(void);
+void ui_event_door_screen(lv_event_t * e);
+extern lv_obj_t * ui_door_screen;
+void ui_event_door_button(lv_event_t * e);
+extern lv_obj_t * ui_door_button;
+extern lv_obj_t * ui_door_button_label;
+void ui_event_door_label(lv_event_t * e);
+extern lv_obj_t * ui_door_label;
+// SCREEN: ui_reconnect_screen
+void ui_reconnect_screen_screen_init(void);
+void ui_event_reconnect_screen(lv_event_t * e);
+extern lv_obj_t * ui_reconnect_screen;
+void ui_event_reconnect_label(lv_event_t * e);
+extern lv_obj_t * ui_reconnect_label;
+extern lv_obj_t * ui____initial_actions0;
 
-    LV_IMG_DECLARE(ui_img_bw_arrow_png); // assets\bw_arrow.png
+LV_IMG_DECLARE(ui_img_bw_arrow_png);    // assets\bw_arrow.png
 
-    LV_FONT_DECLARE(ui_font_MMBold24);
-    LV_FONT_DECLARE(ui_font_MMMedium24);
-    LV_FONT_DECLARE(ui_font_MMRegular24);
+LV_FONT_DECLARE(ui_font_MMBold24);
+LV_FONT_DECLARE(ui_font_MMMedium24);
+LV_FONT_DECLARE(ui_font_MMRegular24);
 
-    void ui_init(void);
+void ui_init(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/

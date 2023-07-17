@@ -9,14 +9,13 @@
 #include "ui.h"
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 // COMPONENT Slider1
 #define UI_COMP_SLIDER1_SLIDER1 0
 #define _UI_COMP_SLIDER1_NUM 1
-    lv_obj_t *ui_Slider1_create(lv_obj_t *comp_parent);
+lv_obj_t * ui_Slider1_create(lv_obj_t * comp_parent);
 
 #ifdef __cplusplus
 } /*extern "C"*/

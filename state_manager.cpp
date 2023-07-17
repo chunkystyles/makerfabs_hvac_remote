@@ -84,63 +84,39 @@ void updateStateFromMqtt(char *message)
         Serial.println(error.f_str());
         return;
     }
-    if (isBoost != doc["boost"])
+    isBoost = doc["boost"];
+    if (isBoost)
     {
-        isBoost = doc["boost"];
-        if (isBoost)
-        {
-            lv_obj_add_state(ui_Switch1, LV_STATE_CHECKED);
-        }
-        else
-        {
-            lv_obj_clear_state(ui_Switch1, LV_STATE_CHECKED);
-        }
+        lv_obj_add_state(ui_Switch1, LV_STATE_CHECKED);
     }
-    if (isHorz != doc["horizontal"])
+    else
     {
-        isHorz = doc["horizontal"];
-        if (isHorz)
-        {
-            lv_obj_add_state(ui_Switch3, LV_STATE_CHECKED);
-        }
-        else
-        {
-            lv_obj_clear_state(ui_Switch3, LV_STATE_CHECKED);
-        }
+        lv_obj_clear_state(ui_Switch1, LV_STATE_CHECKED);
     }
-    if (isVert != doc["vertical"])
+    isHorz = doc["horizontal"];
+    if (isHorz)
     {
-        isVert = doc["vertical"];
-        if (isVert)
-        {
-            lv_obj_add_state(ui_Switch2, LV_STATE_CHECKED);
-        }
-        else
-        {
-            lv_obj_clear_state(ui_Switch2, LV_STATE_CHECKED);
-        }
+        lv_obj_add_state(ui_Switch3, LV_STATE_CHECKED);
     }
-    bool rangeChanged = false;
-    if (minCool != doc["minCool"])
+    else
     {
-        minCool = doc["minCool"];
-        rangeChanged = true;
+        lv_obj_clear_state(ui_Switch3, LV_STATE_CHECKED);
     }
-    if (maxCool != doc["maxCool"])
+    isVert = doc["vertical"];
+    if (isVert)
     {
-        maxCool = doc["maxCool"];
-        rangeChanged = true;
+        lv_obj_add_state(ui_Switch2, LV_STATE_CHECKED);
     }
-    if (minHeat != doc["minHeat"])
+    else
     {
-        minHeat = doc["minHeat"];
-        rangeChanged = true;
+        lv_obj_clear_state(ui_Switch2, LV_STATE_CHECKED);
     }
-    if (maxHeat != doc["maxHeat"])
-    {
-        maxHeat = doc["maxHeat"];
-        rangeChanged = true;
-    }
+    minCool = doc["minCool"];
+    maxCool = doc["maxCool"];
+    minHeat = doc["minHeat"];
+    maxHeat = doc["maxHeat"];
+    setPoint = doc["temperature"];
+    fanSpeed = doc["fanSpeed"];
     if (strcmp(mode, doc["mode"]) != 0)
     {
         strcpy(mode, doc["mode"]);
@@ -148,33 +124,9 @@ void updateStateFromMqtt(char *message)
         if (optionIndex > -1)
         {
             lv_dropdown_set_selected(ui_Dropdown2, optionIndex);
-            if (strcmp(mode, "Fan") == 0)
-            {
-                lv_label_set_text(ui_Label2, get_target_label_text(fanSpeed));
-            }
-            else
-            {
-                lv_label_set_text(ui_Label2, get_target_label_text(setPoint));
-            }
         }
     }
-    if (rangeChanged)
-    {
-        if (strcmp(mode, "Heat"))
-        {
-            lv_slider_set_range(ui_Slider2, minHeat, maxHeat);
-        }
-        else
-        {
-            lv_slider_set_range(ui_Slider2, minCool, maxCool);
-        }
-    }
-    if (setPoint != doc["temperature"])
-    {
-        setPoint = doc["temperature"];
-        lv_slider_set_value(ui_Slider2, setPoint, LV_ANIM_ON);
-        lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
-    }
+    mode_change_ui_update();
     reset_screen_timer();
 }
 
@@ -250,26 +202,38 @@ void mode_change_ui_update()
     }
     else
     {
-        lv_obj_clear_flag(ui_Slider2, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_clear_flag(ui_Switch1, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_clear_flag(ui_Switch2, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_clear_flag(ui_Switch3, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_clear_flag(ui_Label1, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_clear_flag(ui_Label3, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_clear_flag(ui_Label2, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_clear_flag(ui_Label4, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_clear_flag(ui_Image1, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_clear_flag(ui_Image2, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_clear_flag(ui_Image3, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_clear_flag(ui_Image4, LV_OBJ_FLAG_HIDDEN);
         if (strcmp(mode, "Fan") == 0)
         {
+            lv_obj_clear_flag(ui_Slider2, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_Switch1, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_Switch2, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_Switch3, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_Label1, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Label2, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_Label3, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_Label4, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_Image1, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_Image2, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_Image3, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(ui_Image4, LV_OBJ_FLAG_HIDDEN);
             lv_slider_set_range(ui_Slider2, MIN_FAN_SPEED, MAX_FAN_SPEED);
             lv_slider_set_value(ui_Slider2, fanSpeed, LV_ANIM_OFF);
             lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
         }
         else
         {
+            lv_obj_clear_flag(ui_Slider2, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Switch1, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Switch2, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Switch3, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Label1, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Label2, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Label3, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Label4, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Image1, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Image2, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Image3, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(ui_Image4, LV_OBJ_FLAG_HIDDEN);
             if (strcmp(mode, "Heat") == 0)
             {
                 lv_slider_set_range(ui_Slider2, minHeat, maxHeat);

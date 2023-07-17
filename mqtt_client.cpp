@@ -1,5 +1,6 @@
 #include "mqtt_client.h"
 #include "state_manager.h"
+#include "ui.h"
 
 WiFiClient espClient;
 PubSubClient internal_mqtt_client(espClient);
@@ -41,16 +42,24 @@ void mqtt_loop()
   if (!WiFi.isConnected())
   {
     disconnected = true;
-    // TODO: create screen to display disconnected
+    if (ui_Screen4 != lv_scr_act()){
+      lv_scr_load(ui_Screen4);
+    }
     return;
   }
   bool mqttConnected = internal_mqtt_client.connected();
   if (!mqttConnected)
-  {
+  { 
+    if (ui_Screen4 != lv_scr_act()){
+      lv_scr_load(ui_Screen4);
+    }
     mqttConnected = connect(true);
   }
   if (mqttConnected)
   {
+    if (ui_Screen4 == lv_scr_act()){
+      lv_scr_load(ui_Screen1);
+    }
     internal_mqtt_client.loop();
     unsigned long now = millis();
     if (now - retryTimer > MQTT_STATUS_UPDATE_TIME_MS)

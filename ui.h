@@ -52,7 +52,15 @@ extern "C"
     void ui_event_Button2(lv_event_t *e);
     extern lv_obj_t *ui_Button2;
     extern lv_obj_t *ui_Label9;
+    void ui_event_Label8(lv_event_t * e);
     extern lv_obj_t *ui_Label8;
+    // SCREEN: ui_Screen4
+    void ui_Screen4_screen_init(void);
+    void ui_event_Screen4(lv_event_t * e);
+    extern lv_obj_t * ui_Screen4;
+    void ui_event_Label10(lv_event_t * e);
+    extern lv_obj_t * ui_Label10;
+    extern lv_obj_t * ui____initial_actions0;
     extern lv_obj_t *ui____initial_actions0;
 
     LV_IMG_DECLARE(ui_img_bw_arrow_png); // assets\bw_arrow.png

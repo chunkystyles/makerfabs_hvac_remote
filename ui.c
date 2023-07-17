@@ -45,7 +45,15 @@ lv_obj_t *ui_Screen3;
 void ui_event_Button2(lv_event_t *e);
 lv_obj_t *ui_Button2;
 lv_obj_t *ui_Label9;
+void ui_event_Label8(lv_event_t * e);
 lv_obj_t *ui_Label8;
+
+// SCREEN: ui_Screen4
+void ui_Screen4_screen_init(void);
+void ui_event_Screen4(lv_event_t * e);
+lv_obj_t * ui_Screen4;
+void ui_event_Label10(lv_event_t * e);
+lv_obj_t * ui_Label10;
 lv_obj_t *ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
@@ -157,6 +165,30 @@ void ui_event_Button2(lv_event_t *e)
         door_screen_clicked(e);
     }
 }
+void ui_event_Label8(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        door_screen_clicked(e);
+    }
+}
+void ui_event_Screen4(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        screen_clicked(e);
+    }
+}
+void ui_event_Label10(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        screen_clicked(e);
+    }
+}
 
 ///////////////////// SCREENS ////////////////////
 
@@ -171,6 +203,7 @@ void ui_init(void)
     ui_Screen1_screen_init();
     ui_Screen2_screen_init();
     ui_Screen3_screen_init();
+    ui_Screen4_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_Screen1);
 }

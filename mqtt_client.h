@@ -16,4 +16,4 @@ bool connect(bool isReconnect);
 
 void mqtt_publish(char *publishMessage);
 
-void updateStateFromMqtt(char *message);
+void update_state(char *message);

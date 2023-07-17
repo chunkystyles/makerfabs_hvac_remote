@@ -1,24 +1,24 @@
 #include "mqtt_settings.h"
 #include <ArduinoJson.h>
 
-void updateBoostFromUi(bool isOn);
+void update_boost(bool isOn);
 
-void updateHorzFromUi(bool isOn);
+void update_horizontal(bool isOn);
 
-void updateVertFromUi(bool isOn);
+void update_vertical(bool isOn);
 
-void updateModeFromUi(char *message);
+void update_mode(char *message);
 
-void updateSetPointFromUi(int32_t value);
+void update_target_temperature(int32_t value);
 
-void publishUpdate();
+void publish_update();
 
-void updateStateFromMqtt(char *message);
+void update_state(char *message);
 
-void updateTemperatureFromMqtt(char *temperature);
+void update_temperature(char *temperature);
 
-void updateDoorFromMqtt(char *message);
+void update_door(char *message);
 
 char *get_target_label_text(int32_t value);
 
-void mode_change_ui_update();
+void update_ui();

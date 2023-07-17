@@ -8,9 +8,9 @@ static lv_indev_drv_t indev_drv;
 static lv_timer_t *timer;
 static uint32_t user_data = 10;
 const uint16_t timeout = 5000;
-bool isScreenDimmed = false;
-bool isScreenOff = false;
-bool doScreenDimming = true;
+bool is_screen_dimmed = false;
+bool is_screen_off = false;
+bool do_screen_dimming = true;
 
 void lcd_init()
 {
@@ -78,16 +78,16 @@ void lvgl_init()
 
 void screen_timer_event(lv_timer_t *timer)
 {
-    if (doScreenDimming && !isScreenOff)
+    if (do_screen_dimming && !is_screen_off)
     {
-        if (!isScreenDimmed)
+        if (!is_screen_dimmed)
         {
-            isScreenDimmed = true;
+            is_screen_dimmed = true;
             lcd.setBrightness(MY_DIM_BRIGHTNESS);
         }
         else
         {
-            isScreenOff = true;
+            is_screen_off = true;
             lcd.setBrightness(MY_MIN_BRIGHTNESS);
             lv_scr_load(ui_Screen2);
         }
@@ -98,18 +98,18 @@ void reset_screen_timer()
 {
     lcd.setBrightness(MY_MAX_BRIGHTNESS);
     lv_timer_reset(timer);
-    if (isScreenOff && ui_Screen2 == lv_scr_act())
+    if (is_screen_off && ui_Screen2 == lv_scr_act())
     {
         lv_scr_load(ui_Screen1);
     }
-    isScreenDimmed = false;
-    isScreenOff = false;
+    is_screen_dimmed = false;
+    is_screen_off = false;
 }
 
-void setDoScreenDimming(bool input)
+void set_do_screen_dimming(bool input)
 {
-    if (input != doScreenDimming)
+    if (input != do_screen_dimming)
     {
-        doScreenDimming = input;
+        do_screen_dimming = input;
     }
 }

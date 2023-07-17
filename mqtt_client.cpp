@@ -83,15 +83,15 @@ void callback(char *topic, byte *payload, unsigned int length)
   char *output = reinterpret_cast<char *>(payload);
   if (strcmp(topic, MY_MQTT_IN_TOPIC) == 0)
   {
-    updateStateFromMqtt(output);
+    update_state(output);
   }
   else if (strcmp(topic, MY_MQTT_TEMPERATURE_TOPIC) == 0)
   {
-    updateTemperatureFromMqtt(output);
+    update_temperature(output);
   }
   else if (strcmp(topic, MY_MQTT_DOOR_TOPIC) == 0)
   {
-    updateDoorFromMqtt(output);
+    update_door(output);
   }
 }
 

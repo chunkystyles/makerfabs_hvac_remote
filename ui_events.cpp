@@ -16,19 +16,19 @@ void screen_clicked(lv_event_t *e)
 void door_screen_clicked(lv_event_t *e)
 {
 	lv_scr_load(ui_Screen1);
-	setDoScreenDimming(true);
+	set_do_screen_dimming(true);
 	reset_screen_timer();
 }
 
 void boost_slider_checked(lv_event_t *e)
 {
-	updateBoostFromUi(true);
+	update_boost(true);
 	reset_screen_timer();
 }
 
 void boost_slider_unchecked(lv_event_t *e)
 {
-	updateBoostFromUi(false);
+	update_boost(false);
 	reset_screen_timer();
 }
 
@@ -36,38 +36,38 @@ void mode_changed(lv_event_t *e)
 {
 	char buf[32];
 	lv_dropdown_get_selected_str(e->target, buf, sizeof(buf));
-	updateModeFromUi(buf);
+	update_mode(buf);
 	reset_screen_timer();
 }
 
 void slider_released(lv_event_t *e)
 {
 	int32_t value = lv_slider_get_value(e->target);
-	updateSetPointFromUi(value);
+	update_target_temperature(value);
 	reset_screen_timer();
 }
 
 void swing_vert_slider_checked(lv_event_t *e)
 {
-	updateVertFromUi(true);
+	update_vertical(true);
 	reset_screen_timer();
 }
 
 void swing_vert_slider_unchecked(lv_event_t *e)
 {
-	updateVertFromUi(false);
+	update_vertical(false);
 	reset_screen_timer();
 }
 
 void swing_horz_checked(lv_event_t *e)
 {
-	updateHorzFromUi(true);
+	update_horizontal(true);
 	reset_screen_timer();
 }
 
 void swing_horz_unchecked(lv_event_t *e)
 {
-	updateHorzFromUi(false);
+	update_horizontal(false);
 	reset_screen_timer();
 }
 

@@ -26,4 +26,4 @@ void screen_timer_event(lv_timer_t *timer);
 
 void reset_screen_timer();
 
-void setDoScreenDimming(bool input);
+void set_do_screen_dimming(bool input);

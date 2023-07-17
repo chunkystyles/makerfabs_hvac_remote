@@ -10,74 +10,74 @@ using std::string;
 #define MAX_FAN_SPEED 11
 #define MIN_FAN_SPEED 1
 
-bool isBoost = false;
-bool isHorz = false;
-bool isVert = false;
-int32_t setPoint = 68;
+bool is_boost = false;
+bool is_horizontal = false;
+bool is_vertical = false;
+int32_t target_temperature = 68;
 char mode[STRING_LENGTH] = "Off";
-int32_t maxCool = 80;
-int32_t minCool = 68;
-int32_t maxHeat = 78;
-int32_t minHeat = 65;
-int32_t fanSpeed = 11;
-char targetLabel[STRING_LENGTH];
+int32_t max_cool = 80;
+int32_t min_cool = 68;
+int32_t max_heat = 78;
+int32_t min_heat = 65;
+int32_t fan_speed = 11;
+char target_label_text[STRING_LENGTH];
 
-void updateBoostFromUi(bool isOn)
+void update_boost(bool is_on)
 {
-    isBoost = isOn;
-    publishUpdate();
+    is_boost = is_on;
+    publish_update();
 }
 
-void updateHorzFromUi(bool isOn)
+void update_horizontal(bool is_on)
 {
-    isHorz = isOn;
-    publishUpdate();
+    is_horizontal = is_on;
+    publish_update();
 }
 
-void updateVertFromUi(bool isOn)
+void update_vertical(bool is_on)
 {
-    isVert = isOn;
-    publishUpdate();
+    is_vertical = is_on;
+    publish_update();
 }
 
-void updateModeFromUi(char *message)
+void update_mode(char *message)
 {
     strcpy(mode, message);
-    publishUpdate();
-    mode_change_ui_update();
+    publish_update();
+    update_ui();
 }
 
-void updateSetPointFromUi(int32_t value)
+void update_target_temperature(int32_t value)
 {
     if (strcmp(mode, "Fan") == 0)
     {
-        fanSpeed = value;
+        fan_speed = value;
     }
     else
     {
-        setPoint = value;
+        target_temperature = value;
     }
-    publishUpdate();
+    publish_update();
 }
 
-void publishUpdate()
+void publish_update()
 {
     StaticJsonDocument<MQTT_BUFFER_LENGTH> doc;
-    doc["boost"] = isBoost;
-    doc["horizontal"] = isHorz;
-    doc["vertical"] = isVert;
+    doc["boost"] = is_boost;
+    doc["horizontal"] = is_horizontal;
+    doc["vertical"] = is_vertical;
     doc["mode"] = mode;
-    doc["temperature"] = setPoint;
-    doc["fanSpeed"] = fanSpeed;
+    doc["temperature"] = target_temperature;
+    doc["fanSpeed"] = fan_speed;
     char output[MQTT_BUFFER_LENGTH];
     serializeJson(doc, output, MQTT_BUFFER_LENGTH);
     mqtt_publish(output);
 }
 
-void updateStateFromMqtt(char *message)
+void update_state(char *message)
 {
-    bool isWakeUpdate = false;
-    bool isStealthUpdate = false;
+    bool is_wake_update = false;
+    bool is_stealth_update = false;
     StaticJsonDocument<MQTT_BUFFER_LENGTH> doc;
     DeserializationError error = deserializeJson(doc, message);
     if (error)
@@ -86,72 +86,72 @@ void updateStateFromMqtt(char *message)
         Serial.println(error.f_str());
         return;
     }
-    if (isBoost != doc["boost"])
+    if (is_boost != doc["boost"])
     {
-        isBoost = doc["boost"];
-        isWakeUpdate = true;
+        is_boost = doc["boost"];
+        is_wake_update = true;
     }
-    if (isHorz != doc["horizontal"])
+    if (is_horizontal != doc["horizontal"])
     {
-        isHorz = doc["horizontal"];
-        isWakeUpdate = true;
+        is_horizontal = doc["horizontal"];
+        is_wake_update = true;
     }
-    if (isVert != doc["vertical"])
+    if (is_vertical != doc["vertical"])
     {
-        isVert = doc["vertical"];
-        isWakeUpdate = true;
+        is_vertical = doc["vertical"];
+        is_wake_update = true;
     }
-    if (minCool != doc["minCool"])
+    if (min_cool != doc["minCool"])
     {
-        minCool = doc["minCool"];
-        isStealthUpdate = true;
+        min_cool = doc["minCool"];
+        is_stealth_update = true;
     }
-    if (maxCool != doc["maxCool"])
+    if (max_cool != doc["maxCool"])
     {
-        maxCool = doc["maxCool"];
-        isStealthUpdate = true;
+        max_cool = doc["maxCool"];
+        is_stealth_update = true;
     }
-    if (minHeat != doc["minHeat"])
+    if (min_heat != doc["minHeat"])
     {
-        minHeat = doc["minHeat"];
-        isStealthUpdate = true;
+        min_heat = doc["minHeat"];
+        is_stealth_update = true;
     }
-    if (maxHeat != doc["maxHeat"])
+    if (max_heat != doc["maxHeat"])
     {
-        maxHeat = doc["maxHeat"];
-        isStealthUpdate = true;
+        max_heat = doc["maxHeat"];
+        is_stealth_update = true;
     }
-    if (setPoint != doc["temperature"])
+    if (target_temperature != doc["temperature"])
     {
-        setPoint = doc["temperature"];
-        isWakeUpdate = true;
+        target_temperature = doc["temperature"];
+        is_wake_update = true;
     }
-    if (fanSpeed != doc["fanSpeed"])
+    if (fan_speed != doc["fanSpeed"])
     {
-        fanSpeed = doc["fanSpeed"];
-        isWakeUpdate = true;
+        fan_speed = doc["fanSpeed"];
+        is_wake_update = true;
     }
     if (strcmp(mode, doc["mode"]) != 0)
     {
         strcpy(mode, doc["mode"]);
-        int32_t optionIndex = lv_dropdown_get_option_index(ui_Dropdown2, mode);
-        if (optionIndex > -1)
+        int32_t option_index = lv_dropdown_get_option_index(ui_Dropdown2, mode);
+        if (option_index > -1)
         {
-            lv_dropdown_set_selected(ui_Dropdown2, optionIndex);
-            isWakeUpdate = true;
+            lv_dropdown_set_selected(ui_Dropdown2, option_index);
+            is_wake_update = true;
         }
     }
-    if (isWakeUpdate || isStealthUpdate)
+    if (is_wake_update || is_stealth_update)
     {
-        mode_change_ui_update();
+        update_ui();
     }
-    if (isWakeUpdate)
+    if (is_wake_update)
     {
         reset_screen_timer();
     }
 }
 
-void updateTemperatureFromMqtt(char *temperature)
+void update_temperature(char *temperature)
 {
     string converted = temperature;
     string newString = "Current ";
@@ -170,12 +170,12 @@ void updateTemperatureFromMqtt(char *temperature)
     lv_label_set_text(ui_Label7, newString.c_str());
 }
 
-void updateDoorFromMqtt(char *message)
+void update_door(char *message)
 {
     if (strncmp("open", message, 4) == 0)
     {
         lv_scr_load(ui_Screen3);
-        setDoScreenDimming(false);
+        set_do_screen_dimming(false);
         reset_screen_timer();
     }
 }
@@ -186,25 +186,25 @@ char *get_target_label_text(int32_t value)
     {
         if (value == 11)
         {
-            sprintf(targetLabel, "Fan Auto");
+            sprintf(target_label_text, "Fan Auto");
         }
         else
         {
-            sprintf(targetLabel, "Fan speed %d", value);
+            sprintf(target_label_text, "Fan speed %d", value);
         }
     }
     else if (strcmp(mode, "Off") == 0)
     {
-        sprintf(targetLabel, "Off");
+        sprintf(target_label_text, "Off");
     }
     else
     {
-        sprintf(targetLabel, "Target %d°", value);
+        sprintf(target_label_text, "Target %d°", value);
     }
-    return targetLabel;
+    return target_label_text;
 }
 
-void mode_change_ui_update()
+void update_ui()
 {
     if (strcmp(mode, "Off") == 0)
     {
@@ -238,7 +238,7 @@ void mode_change_ui_update()
             lv_obj_add_flag(ui_Image3, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(ui_Image4, LV_OBJ_FLAG_HIDDEN);
             lv_slider_set_range(ui_Slider2, MIN_FAN_SPEED, MAX_FAN_SPEED);
-            lv_slider_set_value(ui_Slider2, fanSpeed, LV_ANIM_OFF);
+            lv_slider_set_value(ui_Slider2, fan_speed, LV_ANIM_OFF);
             lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
         }
         else
@@ -257,15 +257,15 @@ void mode_change_ui_update()
             lv_obj_clear_flag(ui_Image4, LV_OBJ_FLAG_HIDDEN);
             if (strcmp(mode, "Heat") == 0)
             {
-                lv_slider_set_range(ui_Slider2, minHeat, maxHeat);
+                lv_slider_set_range(ui_Slider2, min_heat, max_heat);
             }
             else
             {
-                lv_slider_set_range(ui_Slider2, minCool, maxCool);
+                lv_slider_set_range(ui_Slider2, min_cool, max_cool);
             }
-            lv_slider_set_value(ui_Slider2, setPoint, LV_ANIM_OFF);
+            lv_slider_set_value(ui_Slider2, target_temperature, LV_ANIM_OFF);
             lv_event_send(ui_Slider2, LV_EVENT_VALUE_CHANGED, NULL);
-            if (isBoost)
+            if (is_boost)
             {
                 lv_obj_add_state(ui_Switch1, LV_STATE_CHECKED);
             }
@@ -273,7 +273,7 @@ void mode_change_ui_update()
             {
                 lv_obj_clear_state(ui_Switch1, LV_STATE_CHECKED);
             }
-            if (isHorz)
+            if (is_horizontal)
             {
                 lv_obj_add_state(ui_Switch3, LV_STATE_CHECKED);
             }
@@ -281,7 +281,7 @@ void mode_change_ui_update()
             {
                 lv_obj_clear_state(ui_Switch3, LV_STATE_CHECKED);
             }
-            if (isVert)
+            if (is_vertical)
             {
                 lv_obj_add_state(ui_Switch2, LV_STATE_CHECKED);
             }

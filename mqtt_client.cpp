@@ -42,22 +42,25 @@ void mqtt_loop()
   if (!WiFi.isConnected())
   {
     disconnected = true;
-    if (ui_reconnect_screen != lv_scr_act()){
+    if (ui_reconnect_screen != lv_scr_act())
+    {
       lv_scr_load(ui_reconnect_screen);
     }
     return;
   }
   bool mqttConnected = internal_mqtt_client.connected();
   if (!mqttConnected)
-  { 
-    if (ui_reconnect_screen != lv_scr_act()){
+  {
+    if (ui_reconnect_screen != lv_scr_act())
+    {
       lv_scr_load(ui_reconnect_screen);
     }
     mqttConnected = connect(true);
   }
   if (mqttConnected)
   {
-    if (ui_reconnect_screen == lv_scr_act()){
+    if (ui_reconnect_screen == lv_scr_act())
+    {
       lv_scr_load(ui_main_screen);
     }
     internal_mqtt_client.loop();

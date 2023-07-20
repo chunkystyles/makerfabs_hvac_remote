@@ -8,13 +8,7 @@
 #define TOUCH_REG_YL 0x06
 #define TOUCH_REG_YH 0x05
 
-int readTouchReg(int reg);
-
-int getTouchPointX();
-
-int getTouchPointY();
-
-int ft6236_pos(int pos[2]);
+int read_touch_reg(int reg);
 
 int ft6236_coords(uint16_t *x, uint16_t *y);
 

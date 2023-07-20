@@ -1,7 +1,7 @@
 #include "touch_screen_driver.h"
 #include "display_manager.h"
 
-int readTouchReg(int reg)
+int read_touch_reg(int reg)
 {
     int data = 0;
     Wire.beginTransmission(TOUCH_I2C_ADD);
@@ -21,18 +21,16 @@ int ft6236_coords(uint16_t *x, uint16_t *y)
     int XH = 0;
     int YL = 0;
     int YH = 0;
-
-    XH = readTouchReg(TOUCH_REG_XH);
+    XH = read_touch_reg(TOUCH_REG_XH);
     if (XH >> 6 == 1)
     {
         *x = -1;
         *y = -1;
         return 0;
     }
-    XL = readTouchReg(TOUCH_REG_XL);
-    YH = readTouchReg(TOUCH_REG_YH);
-    YL = readTouchReg(TOUCH_REG_YL);
-
+    XL = read_touch_reg(TOUCH_REG_XL);
+    YH = read_touch_reg(TOUCH_REG_YH);
+    YL = read_touch_reg(TOUCH_REG_YL);
     *x = ((XH & 0x0F) << 8) | XL;
     *y = ((YH & 0x0F) << 8) | YL;
     return 1;

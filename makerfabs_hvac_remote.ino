@@ -7,7 +7,7 @@ void setup()
 {
     Serial.begin(115200);
     Serial.println("Setup start");
-    lcd_init();
+    display_init();
     lvgl_init();
     ui_init();
     mqtt_init();

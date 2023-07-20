@@ -16,7 +16,7 @@
 #define COLOR_LINE TFT_BLACK
 #define COLOR_SHADOW 0x4BAF
 
-void lcd_init();
+void display_init();
 
 void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
 

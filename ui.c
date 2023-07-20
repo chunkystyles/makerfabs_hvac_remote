@@ -163,7 +163,7 @@ void ui_event_door_screen(lv_event_t *e)
     lv_obj_t *target = lv_event_get_target(e);
     if (event_code == LV_EVENT_PRESSED)
     {
-        _ui_screen_change(ui_main_screen, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+        door_screen_clicked(e);
     }
 }
 void ui_event_door_button(lv_event_t *e)
@@ -172,7 +172,7 @@ void ui_event_door_button(lv_event_t *e)
     lv_obj_t *target = lv_event_get_target(e);
     if (event_code == LV_EVENT_PRESSED)
     {
-        screen_clicked(e);
+        door_screen_clicked(e);
     }
 }
 void ui_event_door_label(lv_event_t *e)
@@ -181,7 +181,7 @@ void ui_event_door_label(lv_event_t *e)
     lv_obj_t *target = lv_event_get_target(e);
     if (event_code == LV_EVENT_CLICKED)
     {
-        screen_clicked(e);
+        door_screen_clicked(e);
     }
 }
 void ui_event_reconnect_screen(lv_event_t *e)

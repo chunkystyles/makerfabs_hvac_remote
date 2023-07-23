@@ -1,0 +1,16 @@
+SET(SOURCES components/ui_comp_slider1.c
+    components/ui_comp.c
+    screens/ui_main_screen.c
+    screens/ui_blank_screen.c
+    screens/ui_door_screen.c
+    screens/ui_reconnect_screen.c
+    ui.c
+    components/ui_comp_hook.c
+    ui_helpers.c
+    ui_events.cpp
+    images/ui_img_bw_arrow_png.c
+    fonts/ui_font_MMBold24.c
+    fonts/ui_font_MMMedium24.c
+    fonts/ui_font_MMRegular24.c)
+
+add_library(ui ${SOURCES})

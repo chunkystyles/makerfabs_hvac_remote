@@ -32,7 +32,8 @@ lv_obj_t *ui_arrow_down_image;
 lv_obj_t *ui_arrow_right_image;
 lv_obj_t *ui_arrow_left_image;
 lv_obj_t *ui_mode_label;
-lv_obj_t *ui_current_temp_label;
+lv_obj_t *ui_room_temp_label;
+lv_obj_t *ui_thermostat_temp_label;
 
 // SCREEN: ui_blank_screen
 void ui_blank_screen_screen_init(void);

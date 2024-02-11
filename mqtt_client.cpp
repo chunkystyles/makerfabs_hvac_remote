@@ -90,7 +90,11 @@ void callback(char *topic, byte *payload, unsigned int length)
   }
   else if (strcmp(topic, MY_MQTT_TEMPERATURE_TOPIC) == 0)
   {
-    update_temperature(output);
+    update_temperature(output, length);
+  }
+  else if (strcmp(topic, MY_MQTT_THERMOSTAT_TOPIC) == 0)
+  {
+    update_thermostat(output, length);
   }
   else if (strcmp(topic, MY_MQTT_DOOR_TOPIC) == 0)
   {
@@ -117,6 +121,7 @@ bool connect(bool isReconnect)
       }
       internal_mqtt_client.subscribe(MY_MQTT_IN_TOPIC);
       internal_mqtt_client.subscribe(MY_MQTT_TEMPERATURE_TOPIC);
+      internal_mqtt_client.subscribe(MY_MQTT_THERMOSTAT_TOPIC);
       internal_mqtt_client.subscribe(MY_MQTT_DOOR_TOPIC);
     }
     else

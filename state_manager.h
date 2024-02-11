@@ -15,7 +15,9 @@ void publish_update();
 
 void update_state(char *message);
 
-void update_temperature(char *temperature);
+void update_temperature(char *temperature, unsigned int length);
+
+void update_thermostat(char *temperature, unsigned int length);
 
 void update_door(char *message);
 

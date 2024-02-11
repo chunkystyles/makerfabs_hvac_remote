@@ -151,23 +151,26 @@ void update_state(char *message)
     }
 }
 
-void update_temperature(char *temperature)
+void update_temperature(char *temperature, unsigned int length)
 {
-    string converted = temperature;
-    string newString = "Current ";
-    for (int i = 0; i < sizeof(temperature); i++)
+    string newString = "Room ";
+    for (int i = 0; i < length; i++)
     {
-        if (isdigit(temperature[i]) || temperature[i] == '.')
-        {
-            newString += temperature[i];
-        }
-        else
-        {
-            break;
-        }
+        newString += temperature[i];
     }
     newString += "°";
-    lv_label_set_text(ui_current_temp_label, newString.c_str());
+    lv_label_set_text(ui_room_temp_label, newString.c_str());
+}
+
+void update_thermostat(char *temperature, unsigned int length)
+{
+    string newString = "Thermostat ";
+    for (int i = 0; i < length; i++)
+    {
+        newString += temperature[i];
+    }
+    newString += "°";
+    lv_label_set_text(ui_thermostat_temp_label, newString.c_str());
 }
 
 void update_door(char *message)

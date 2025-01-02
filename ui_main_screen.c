@@ -44,7 +44,7 @@ void ui_main_screen_screen_init(void)
     lv_obj_set_style_text_font(ui_boost_label, &ui_font_MMBold24, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_mode_dropdown = lv_dropdown_create(ui_main_screen);
-    lv_dropdown_set_options(ui_mode_dropdown, "Off\nHeat\nCool\nFan");
+    lv_dropdown_set_options(ui_mode_dropdown, STARTING_AVAILABLE_MODES);
     lv_obj_set_width(ui_mode_dropdown, 103);
     lv_obj_set_height(ui_mode_dropdown, LV_SIZE_CONTENT); /// 1
     lv_obj_set_x(ui_mode_dropdown, 155);

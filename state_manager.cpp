@@ -15,6 +15,7 @@ bool is_horizontal = false;
 bool is_vertical = false;
 int32_t target_temperature = 68;
 char mode[STRING_LENGTH] = "Off";
+char availableModes[STRING_LENGTH] = STARTING_AVAILABLE_MODES;
 int32_t max_cool = 80;
 int32_t min_cool = 68;
 int32_t max_heat = 78;
@@ -134,12 +135,7 @@ void update_state(char *message)
     if (strcmp(mode, doc["mode"]) != 0)
     {
         strcpy(mode, doc["mode"]);
-        int32_t option_index = lv_dropdown_get_option_index(ui_mode_dropdown, mode);
-        if (option_index > -1)
-        {
-            lv_dropdown_set_selected(ui_mode_dropdown, option_index);
-            is_wake_update = true;
-        }
+        is_wake_update = update_mode_selection();
     }
     if (is_wake_update || is_stealth_update)
     {
@@ -148,6 +144,19 @@ void update_state(char *message)
     if (is_wake_update)
     {
         reset_screen_timer();
+    }
+}
+
+bool update_mode_selection() {
+    int32_t option_index = lv_dropdown_get_option_index(ui_mode_dropdown, mode);
+    if (option_index > -1)
+    {
+        lv_dropdown_set_selected(ui_mode_dropdown, option_index);
+        return true;
+    }
+    else
+    {
+      return false;
     }
 }
 
@@ -180,6 +189,24 @@ void update_door(char *message)
         lv_scr_load(ui_door_screen);
         set_do_screen_dimming(false);
         reset_screen_timer();
+    }
+}
+
+void update_available_modes(char *message, unsigned int length)
+{
+    char newString[STRING_LENGTH];
+    strncpy(newString, message, length);
+    newString[length] = '\0';
+    if (strcmp(newString, availableModes) != 0)
+    {
+        strcpy(availableModes, newString);
+        lv_dropdown_set_options(ui_mode_dropdown, availableModes);
+        bool is_wake_update = update_mode_selection();
+        update_ui();
+        if (is_wake_update)
+        {
+            reset_screen_timer();
+        }
     }
 }
 

@@ -12,7 +12,7 @@ void mqtt_init()
 {
   // MY_SSID and MY_PWD are defined in secrets.h which will not be uploaded
   // You will need to create your own version of this file to compile
-  WiFi.setAutoConnect(true);
+  WiFi.setAutoReconnect(true);
   WiFi.begin(MY_SSID, MY_PWD);
   int connect_count = 0;
   while (WiFi.status() != WL_CONNECTED)
@@ -100,6 +100,10 @@ void callback(char *topic, byte *payload, unsigned int length)
   {
     update_door(output);
   }
+  else if (strcmp(topic, MY_MQTT_AVAILABLE_MODES_TOPIC) == 0)
+  {
+    update_available_modes(output, length);
+  }
 }
 
 bool connect(bool isReconnect)
@@ -107,7 +111,7 @@ bool connect(bool isReconnect)
   uint8_t tries = 0;
   while (!internal_mqtt_client.connected())
   {
-    String clientId = "ESP8266Client-";
+    String clientId = "HVAC-Remote-";
     clientId += String(random(0xffff), HEX);
     if (internal_mqtt_client.connect(clientId.c_str()))
     {
@@ -123,6 +127,7 @@ bool connect(bool isReconnect)
       internal_mqtt_client.subscribe(MY_MQTT_TEMPERATURE_TOPIC);
       internal_mqtt_client.subscribe(MY_MQTT_THERMOSTAT_TOPIC);
       internal_mqtt_client.subscribe(MY_MQTT_DOOR_TOPIC);
+      internal_mqtt_client.subscribe(MY_MQTT_AVAILABLE_MODES_TOPIC);
     }
     else
     {

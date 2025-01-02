@@ -5,6 +5,7 @@
 
 #ifndef _7_5_23_UI_H
 #define _7_5_23_UI_H
+#define STARTING_AVAILABLE_MODES "Off\nHeat\nCool\nFan"
 
 #ifdef __cplusplus
 extern "C"

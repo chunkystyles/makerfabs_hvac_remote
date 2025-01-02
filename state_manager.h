@@ -15,11 +15,15 @@ void publish_update();
 
 void update_state(char *message);
 
+bool update_mode_selection();
+
 void update_temperature(char *temperature, unsigned int length);
 
 void update_thermostat(char *temperature, unsigned int length);
 
 void update_door(char *message);
+
+void update_available_modes(char *message, unsigned int length);
 
 char *get_target_label_text(int32_t value);
 

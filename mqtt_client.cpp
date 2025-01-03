@@ -1,5 +1,6 @@
 #include "mqtt_client.h"
 #include "state_manager.h"
+#include <lvgl.h>
 #include "ui.h"
 
 WiFiClient espClient;
@@ -17,24 +18,24 @@ void mqtt_init()
   int connect_count = 0;
   while (WiFi.status() != WL_CONNECTED)
   {
-    delay(500);
-    Serial.print(".");
     connect_count++;
-    if (connect_count > 20)
+    if (connect_count > WIFI_MAX_RETRIES)
     {
-      Serial.println("Wifi time out");
-      break;
+      reboot();
     }
+    delay(WIFI_RETRY_TIME);
   }
   disconnected = false;
-  Serial.println("Wifi init finished.");
-  Serial.print("IP address: ");
+  Serial.print("Connected to WiFi with IP address: ");
   Serial.println(WiFi.localIP());
   randomSeed(micros());
   retryTimer = millis();
   internal_mqtt_client.setServer(MY_MQTT_URL, 1883); // MY_MQTT_URL is in secrets.h
   internal_mqtt_client.setCallback(callback);
-  connect(false);
+  if (!connect(false))
+  {
+    reboot();
+  }
 }
 
 void mqtt_loop()
@@ -45,6 +46,7 @@ void mqtt_loop()
     if (ui_reconnect_screen != lv_scr_act())
     {
       lv_scr_load(ui_reconnect_screen);
+      lv_timer_handler();
     }
     return;
   }
@@ -54,14 +56,16 @@ void mqtt_loop()
     if (ui_reconnect_screen != lv_scr_act())
     {
       lv_scr_load(ui_reconnect_screen);
+      lv_timer_handler();
     }
     mqttConnected = connect(true);
   }
   if (mqttConnected)
   {
-    if (ui_reconnect_screen == lv_scr_act())
+    if (ui_main_screen != lv_scr_act())
     {
       lv_scr_load(ui_main_screen);
+      lv_timer_handler();
     }
     internal_mqtt_client.loop();
     unsigned long now = millis();
@@ -78,6 +82,10 @@ void mqtt_loop()
         internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Checkin");
       }
     }
+  }
+  else
+  {
+    reboot();
   }
 }
 
@@ -133,10 +141,7 @@ bool connect(bool isReconnect)
     {
       if (++tries < MQTT_MAX_RETRIES)
       {
-        Serial.print("failed, rc=");
-        Serial.print(internal_mqtt_client.state());
-        Serial.println(" try again in 5 seconds");
-        delay(5000);
+        delay(MQTT_RETRY_TIME);
       }
       else
       {
@@ -151,4 +156,13 @@ void mqtt_publish(char *publishMessage)
 {
   snprintf(msg, MQTT_BUFFER_LENGTH, publishMessage);
   internal_mqtt_client.publish(MY_MQTT_OUT_TOPIC, msg);
+}
+
+void(* resetDevice) (void) = 0;
+
+void reboot() {
+  lv_label_set_text(ui_reconnect_label, "Unable to connect to WiFi.\nRestarting in 1 minute.");
+  lv_timer_handler();
+  delay(60000);
+  resetDevice();
 }

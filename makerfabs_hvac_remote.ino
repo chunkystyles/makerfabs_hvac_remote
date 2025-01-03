@@ -6,10 +6,12 @@
 void setup()
 {
     Serial.begin(115200);
+    while(!Serial);
     Serial.println("Setup start");
     display_init();
     lvgl_init();
     ui_init();
+    lv_timer_handler();
     mqtt_init();
 }
 

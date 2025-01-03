@@ -219,5 +219,5 @@ void ui_init(void)
     ui_door_screen_screen_init();
     ui_reconnect_screen_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
-    lv_disp_load_scr(ui_main_screen);
+    lv_disp_load_scr(ui_reconnect_screen);
 }

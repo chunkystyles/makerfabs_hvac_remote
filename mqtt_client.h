@@ -12,10 +12,18 @@ void mqtt_loop();
 
 void callback(char *topic, byte *payload, unsigned int length);
 
-bool connect(bool isReconnect);
+void connect_wifi();
+
+void reconnect_wifi();
+
+bool connect_mqtt(bool isReconnect);
+
+void reconnect_mqtt();
 
 void mqtt_publish(char *publishMessage);
 
 void update_state(char *message);
 
 void reboot();
+
+void update_signal();

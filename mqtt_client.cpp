@@ -1,4 +1,5 @@
 #include "mqtt_client.h"
+#include "display_manager.h"
 #include "state_manager.h"
 #include <lvgl.h>
 #include "ui.h"
@@ -8,34 +9,25 @@ PubSubClient internal_mqtt_client(espClient);
 char msg[MQTT_BUFFER_LENGTH];
 unsigned long retryTimer;
 bool disconnected = true;
+String clientId = "HVAC-Remote-";
+char signalStrength[4];
 
 void mqtt_init()
 {
-  // MY_SSID and MY_PWD are defined in secrets.h which will not be uploaded
-  // You will need to create your own version of this file to compile
-  WiFi.setAutoReconnect(true);
-  WiFi.begin(MY_SSID, MY_PWD);
-  int connect_count = 0;
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    connect_count++;
-    if (connect_count > WIFI_MAX_RETRIES)
-    {
-      reboot();
-    }
-    delay(WIFI_RETRY_TIME);
-  }
+  connect_wifi();
   disconnected = false;
   Serial.print("Connected to WiFi with IP address: ");
   Serial.println(WiFi.localIP());
   randomSeed(micros());
+  clientId += String(random(0xffff), HEX);
   retryTimer = millis();
   internal_mqtt_client.setServer(MY_MQTT_URL, 1883); // MY_MQTT_URL is in secrets.h
   internal_mqtt_client.setCallback(callback);
-  if (!connect(false))
+  if (!connect_mqtt(false))
   {
     reboot();
   }
+  lv_scr_load(ui_main_screen);
 }
 
 void mqtt_loop()
@@ -43,49 +35,30 @@ void mqtt_loop()
   if (!WiFi.isConnected())
   {
     disconnected = true;
-    if (ui_reconnect_screen != lv_scr_act())
-    {
-      lv_scr_load(ui_reconnect_screen);
-      lv_timer_handler();
-    }
-    return;
+    reconnect_wifi();
   }
   bool mqttConnected = internal_mqtt_client.connected();
   if (!mqttConnected)
   {
-    if (ui_reconnect_screen != lv_scr_act())
-    {
-      lv_scr_load(ui_reconnect_screen);
-      lv_timer_handler();
-    }
-    mqttConnected = connect(true);
+    disconnected = true;
+    reconnect_mqtt();
   }
-  if (mqttConnected)
+  internal_mqtt_client.loop();
+  unsigned long now = millis();
+  if (now - retryTimer > MQTT_STATUS_UPDATE_TIME_MS)
   {
-    if (ui_main_screen != lv_scr_act())
+    retryTimer = now;
+    if (disconnected)
     {
-      lv_scr_load(ui_main_screen);
-      lv_timer_handler();
+      disconnected = false;
+      internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Reconnected");
     }
-    internal_mqtt_client.loop();
-    unsigned long now = millis();
-    if (now - retryTimer > MQTT_STATUS_UPDATE_TIME_MS)
+    else
     {
-      retryTimer = now;
-      if (disconnected)
-      {
-        disconnected = false;
-        internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Reconnected");
-      }
-      else
-      {
-        internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Checkin");
-      }
+      internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Checkin");
     }
-  }
-  else
-  {
-    reboot();
+    update_signal();
+    internal_mqtt_client.publish(MY_MQTT_SIGNAL_TOPIC, signalStrength);
   }
 }
 
@@ -114,13 +87,61 @@ void callback(char *topic, byte *payload, unsigned int length)
   }
 }
 
-bool connect(bool isReconnect)
+void connect_wifi()
+{
+  // MY_SSID and MY_PWD are defined in secrets.h which will not be uploaded
+  // You will need to create your own version of this file to compile
+  WiFi.setAutoReconnect(true);
+  WiFi.begin(MY_SSID, MY_PWD);
+  unsigned long start = millis();
+  unsigned long now = 0;
+  while (true)
+  {
+    now = millis();
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      break;
+    }
+    if (now - start >= WIFI_CONNECTION_TIMEOUT)
+    {
+      reboot();
+    }
+  }
+}
+
+void reconnect_wifi()
+{
+  if (ui_reconnect_screen != lv_scr_act())
+  {
+    lv_scr_load(ui_reconnect_screen);
+    lv_timer_handler();
+  }
+  WiFi.disconnect();
+  WiFi.reconnect();
+  unsigned long start = millis();
+  unsigned long now = 0;
+  while (true)
+  {
+    now = millis();
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      break;
+    }
+    if (now - start >= WIFI_CONNECTION_TIMEOUT)
+    {
+      reboot();
+    }
+  }
+  reset_screen_timer();
+  lv_scr_load(ui_main_screen);
+  lv_timer_handler();
+}
+
+bool connect_mqtt(bool isReconnect)
 {
   uint8_t tries = 0;
   while (!internal_mqtt_client.connected())
   {
-    String clientId = "HVAC-Remote-";
-    clientId += String(random(0xffff), HEX);
     if (internal_mqtt_client.connect(clientId.c_str()))
     {
       if (isReconnect)
@@ -152,6 +173,21 @@ bool connect(bool isReconnect)
   return true;
 }
 
+void reconnect_mqtt()
+{
+  if (ui_reconnect_screen != lv_scr_act())
+  {
+    lv_scr_load(ui_reconnect_screen);
+    lv_timer_handler();
+  }
+  if (!connect_mqtt(true))
+  {
+    reboot();
+  }
+  lv_scr_load(ui_main_screen);
+  lv_timer_handler();
+}
+
 void mqtt_publish(char *publishMessage)
 {
   snprintf(msg, MQTT_BUFFER_LENGTH, publishMessage);
@@ -165,4 +201,21 @@ void reboot() {
   lv_timer_handler();
   delay(60000);
   resetDevice();
+}
+
+void update_signal()
+{
+  int dBm = WiFi.RSSI();
+  if (dBm <= -100)
+  {
+    itoa(0, signalStrength, 10);
+  }
+  else if (dBm >= -50)
+  {
+    itoa(100, signalStrength, 10);
+  }
+  else
+  {
+    itoa(2 * (dBm + 100), signalStrength, 10);
+  }
 }

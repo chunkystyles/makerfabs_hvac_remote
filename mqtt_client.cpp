@@ -152,6 +152,9 @@ bool connect_mqtt(bool isReconnect)
       {
         internal_mqtt_client.publish(MY_MQTT_STATUS_TOPIC, "Connected");
       }
+      char ipAddress[16];
+      WiFi.localIP().toString().toCharArray(ipAddress, 16);
+      internal_mqtt_client.publish(MY_MQTT_IP_ADDRESS_TOPIC, ipAddress);
       internal_mqtt_client.subscribe(MY_MQTT_IN_TOPIC);
       internal_mqtt_client.subscribe(MY_MQTT_TEMPERATURE_TOPIC);
       internal_mqtt_client.subscribe(MY_MQTT_THERMOSTAT_TOPIC);
